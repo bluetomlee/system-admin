@@ -1,0 +1,59 @@
+.setting-container{position: relative;min-height:500px;}
+.setting-container aside{position: absolute;height: 100%;min-height: 501px;width: 148px;text-align: center;background-color: #fafafa;border-bottom: 1px solid #dedddf;border-right: 1px solid #dedddf;}
+
+
+/* 左侧 */
+.menu-item{position:relative;line-height:40px;padding:0 40px;border-bottom: 1px solid #dedddf;}
+.menu-item .menu-tri{position: absolute;right: 0;top:0;border-width:3px;border-style:solid;border-color: #666 #fff #fff #fff;}
+.menu-item .active:after{
+	content: "";
+	position: absolute;
+	top: 15px;
+	left: 64px;
+	width: 65px;
+	height: 65px;
+	border: 2px solid #DEDEDE;
+	-webkit-transform: rotate(44deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	background-color: #FEFEFE;
+	background-image: -moz-linear-gradient(top, #f21972, #e80f43);
+	background-image: -o-linear-gradient(top, #f21972, #e80f43);
+	/* background-image: linear-gradient(to bottom, #F21972, #E80F43); */
+	-webkit-box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.7) inset, -1px 0 0 rgba(255, 255, 255, 0.7) inset;
+	box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.7) inset, -1px 0 0 rgba(255, 255, 255, 0.7) inset;
+}
+.menu-item a,.menu-item a:hover{color:#333;}
+.list-content{margin-left:157px;}
+
+/* 右侧表格 */
+.setting-list{margin-left: 4px;}
+.setting-list .setting-search{position: relative;margin:-2px 20px 0 0;}
+.setting-list .setting-search .search-group input{width: 202px;height: 28px;line-height: 28px;border: 1px solid #cccccc;border-radius: 3px;}
+.setting-search .glyphicon-search{position: absolute;right: 9px;top: 7px;cursor: pointer;}
+.setting-list thead>tr>th{color: #868281;border: none;}
+.setting-list tbody>tr>td{padding: 6px;}
+.setting-list .list-head,.setting-list tr{height: 40px;border-bottom: 1px solid #E5E5E5;}
+.setting-list .list-head{padding-left: 8px;}
+.setting-list .list-head button{width: 94px;height: 26px;border-radius: 3px;padding-top: 3px;}
+.setting-list .setting-ctr{display: inline-block;}
+.setting-list .id{text-align: center;}
+.setting-list .name{width: 75px;}
+.setting-list .join-date{width: 105px;}
+.setting-list .last{width: 310px;}
+.setting-list .setting-ctr span{margin: 0 4px;color: #5f97fb;cursor: pointer;}
+
+/* toggle-switch 样式调整 */
+.system-status{float: right;padding-right: 6px;}
+.system-status .toggle-switch{ min-width: 50px;height: 20px;width: 50px;border-radius: 10px;line-height: 20px;border: none;}/*background: #ccc;*/
+.system-status.permission-on .toggle-switch{ background: #5f97fb;}
+.system-status.permission-off .toggle-switch{ background: #ccc;}
+.system-status .toggle-switch span{height: 20px;line-height: 20px;font-size: 0;}
+.system-status .toggle-switch .switch-left{ border-radius: 10px;width: 18px;height: 18px; background: #fff;position: absolute;left: 30px;margin-top: 1px;}
+.system-status .toggle-switch .switch-right{ border-radius: 10px;width: 18px;height: 18px;background: #fff;color: #fff;position: absolute;right: 30px;margin-top: 1px;}
+.system-status .toggle-switch .knob{ width: 35px;}
+.system-status .toggle-switch .switch-on .knob{ background: #5f97fb}
+.system-status .toggle-switch .switch-on .switch-right{ display: none;}
+.system-status .toggle-switch .switch-off .knob{ background: #ccc}
+.system-status .toggle-switch .switch-off .switch-left{ display: none}

@@ -1,0 +1,40 @@
+.mine{
+	float: left;
+	width: 754px;
+	margin: 30px 0 50px 178px;
+	border: 1px solid #dedddf;
+	color:#3e3e3e;
+}
+.mine .last{
+	border: none;
+}
+.mine-item{
+	position: relative;
+	padding:20px;
+	min-height: 103px;
+	border-bottom: 1px solid #dedddf;
+}
+.mine-item .form-horizontal{
+	margin-left: -83px;
+}
+.mine-item .form-group{
+	margin-bottom: 6px;
+}
+.mine-item .change{
+	position: absolute;
+	right: 14px;
+	top: 11px;
+}
+.mine-item h4{
+	padding-bottom: 9px;
+	font-size: 14px;
+	color: #868281;
+}
+.mine-item p{
+	line-height: 25px;
+}
+
+#changepassword .errorPassword{
+	text-align: left;
+	color: #cc0000;
+}

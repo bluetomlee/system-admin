@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html class="" ng-app="systemApp" class="no-js">
+ <head> 
+  <meta charset="utf-8" /> 
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> --> 
+  <meta name="keywords" content="DChat,电商,电子商务,客户管理,CRM,社会化" /> 
+  <meta name="description" content="DChat是一个能在你的微信聊天窗口自定义导航菜单，分组群发，对话及搜索商品，橱窗展示的社区客户管理工具，而且还有丰富的营销插件帮助你和会员进行互动，可以让你的微信瞬间变成APP！" /> 
+  <title id="js-meta-title">选择团队</title> 
+  <link rel="icon" href="/static/v2/image/favicon.ico" /> 
+  <!-- ▼ Common CSS --> 
+  <link rel="stylesheet" href="/static/v1/qy/dist/css/aio-min.css?v=1420523963">
+  <!-- ▲ Common CSS --> 
+  <!-- ▼ App CSS --> 
+  <link rel="stylesheet" href="/static/v1/system/app/app.css?_vr_=1420523963" />
+  <link rel="stylesheet" href="/static/v1/qy/app/app.css?v=1420523963">
+  <link rel="stylesheet" href="/static/v1/system/app/view_minisite/minisite_list.css?v=1420523963">
+  <link rel="stylesheet" href="/static/v1/system/app/view_admin/admin.css?v=1420523963">
+  <link rel="stylesheet" href="/static/v2/css/nprogress.css?_vr_=1420523963" />
+
+  <!-- 分组样式 -->
+  <link rel="stylesheet" href="/static/v1/qy/app/bower_components/jstree/dist/themes/department/style.css?v=20150113"/>
+
+  <!-- 系统管理列表 -->
+  <link rel="stylesheet" href="/static/v1/system/app/view_system/list/list.css?v=1420523963">
+
+  <!-- Token样式 -->
+  <link rel="stylesheet" href="/static/v1/system/app/view_system/token/token.css?v=1420523963"/>
+
+  <!-- Mine样式 -->
+  <link rel="stylesheet" href="/static/v1/system/app/view_system/mine/mine.css?v=1420523963"/>
+
+  <!-- 系统样式 -->
+  <link rel="stylesheet" href="/static/v1/system/app/view_system/back/back.css?v=1420523963"/>
+
+  <!-- 第三方库 通过gulp合并，详情见gulpfile.js -->
+  <script type="text/javascript" src="/static/v1/qy/dist/js/aio-min.js?v=<?php echo URL::assetsVersion() ?>"></script>
+  <script type="text/javascript" src="/static/v1/system/app/app.js"></script>
+
+  <!-- ministe js-->
+  <script type="text/javascript" src="/static/v1/system/app/view_minisite/minisite_list.js"></script>
+  <script type="text/javascript" src="/static/v1/system/app/view_admin/admin.js"></script>
+  <script type="text/javascript" src="/static/v1/system/app/view_admin/admin-directive.js"></script>
+  <!-- ministe End-->
+
+  <!-- systemApp -->
+  <script type="text/javascript" src="/static/v1/system/app/view_system/list/list.js"></script>
+  <script type="text/javascript" src="/static/v1/system/app/view_system/token/token.js"></script>
+  <script type="text/javascript" src="/static/v1/system/app/view_system/mine/mine.js"></script>
+  <script type="text/javascript" src="/static/v1/system/app/view_system/back/back.js"></script>
+  <!-- systemApp End -->
+
+  <!-- ▲ Common config --> 
+ </head>
+ <body class="theme theme--blue" ng-controller="SystemController"> 
+  <div class="container" style="padding-left: calc(100vw - 100%);"> 
+   <div class="content" role="main"> 
+    <div class="app" style="min-height: 640px"> 
+     <div class="app-init-container">
+      <div class="team">
+       <div class="wrapper-app"> 
+        <div class="container-app"> 
+         <div class="header-app"> 
+          <span class="title">选择团队/公司</span> 
+          <div class="account">
+           <span style="color: #000"></span> - 
+           <a href="/japi/logout">退出</a>
+          </div> 
+         </div>
+         <div class="navigation">
+           <span><a href="v2/account/team#select">WeChat</a></span>
+           <span><a href="system#/vs">Virtual Station</a></span>
+           <span><a href="system#/setting/list">系统管理</a></span>
+         </div> 
+         <div class="search-team" style="display: none"> 
+          <form class="form-search"> 
+           <input type="text" class="span3 search-query" placeholder="搜索团队/公司/微信名称" /> 
+           <button type="submit" class="btn search-btn">搜索</button> 
+          </form> 
+         </div> 
+          <div ng-view></div>
+        </div> 
+       </div>
+      </div>
+     </div> 
+     <div class="notify-bar js-notify animated hinge hide"> 
+     </div> 
+    </div> 
+    <footer class="footer" style="background:none;position:static;"> 
+     <p class="copyright">&copy; dxy.cn</p> 
+    </footer> 
+   </div> 
+  </div> 
+ </body>
+</html>

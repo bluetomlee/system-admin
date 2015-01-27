@@ -1,0 +1,93 @@
+<div class="setting-container" ng-controler="SystemAdminController" ng-init="init()">
+  <aside>
+    <ul>
+        <li class="menu-item"><a href="system#/setting/list">所有管理员</a>
+        </li>
+        <li class="menu-item"><a href="system#/setting/mine">我</a></li>
+        <li class="menu-item"><a href="system#/setting/back">系统</a></li>
+    </ul>
+  </aside>
+  <div class="mini-detail">
+       <div class="mini-admin">
+        <h4 class="mini-admin-tt">管理员</h4><a href="javascript:" ng-click="modalChangeAdmin()">修改</a>
+        <div class="tag"><span ng-repeat="tag in clientSuperList">{{tag.nickName}}</span></div>
+            <div>
+                <h4>权限范围</h4>
+                <p>即minisite的超级管理员，拥有此minisite在VS中的所有权限，以及在SIM中的配置权限。</p>
+            </div>        
+       </div>
+  </div>
+  <div style="clear: both"></div>
+</div>
+<!-- 修改管理员 -->
+    <div id="modalAdmin">
+        <script type="text/ng-template" id="changeAdminList.html">
+            <div class="modal-header">
+                <h4 class="modal-title center">修改管理员</h4>
+            </div>
+            <div class="modal-body" ng-init="showAdminList()">
+                <div class="adminTags form-group">
+                        <tags-input
+                        ng-model="selectedTags"
+                        min-length="1"
+                        display-property="nickName"
+                        add-on-enter="false"
+                        add-on-space="false"
+                        add-on-comma="false"
+                        add-on-blur="false"
+                        on-tag-added="tagAdd($tag)"
+                        on-tag-removed="removeAdminTag($tag)"
+                        placeholder="输入空格或名称查找"
+                        >
+                        <auto-complete min-length="1" source="loadAdminList($query)"></auto-complete>
+                    </tags-input>
+                </div>
+                <table class="table table-striped">
+                    <caption>
+                      <i class="fa fa-user"></i>
+                      <h5 class="f-db">管理员</h5>
+                      <span>（管理员需要先添加，才能被选择)</span>
+                    </caption>
+                    <thead>
+                      <tr>
+                        <td>ID</td>
+                        <td>姓名</td>
+                        <td>手机</td>
+                        <td>邮箱</td>
+                        <td></td>
+                      </tr>
+                    </thead>
+                  <tbody>
+                    <tr class="f-cp" ng-repeat="item in adminList" ng-click="changeAdminList(item,$index)">
+                      <td ng-bind="item.id"></td>
+                      <td ng-bind="item.nickName"></td>
+                      <td ng-bind="item.cellphone"></td>
+                      <td ng-bind="item.email"></td>
+                      <!--<td><input ng-model="item.show" type="checkbox"/></td>-->
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="pageview">
+                    <pagination
+                            ng-change="pageChanged()"
+                            total-items="totalItems"
+                            ng-model="currentPage"
+                            max-size="3"
+                            items-per-page="maxSize"
+                            class="pagination-sm"
+                            boundary-links="true"
+                            rotate="false"
+                            previous-text="&lsaquo;"
+                            next-text="&rsaquo;"
+                            first-text="&laquo;"
+                            last-text="&raquo;"
+                            >
+                    </pagination>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" ng-click="saveTags(selectedTags)">确定</button>
+        <button class="btn btn-default" ng-click="cancelModal()">取消</button>    
+            </div>
+        </script>
+    </div>

@@ -1,0 +1,25 @@
+.mini-container{height: 100%;position: relative;}
+/* jstree */
+.mini-container .group-tree{position: absolute;width: 246px;height: 100%;border: 1px solid #dedddf;border-top:none;background: #fafafa;}
+
+/* detail */
+.mini-detail{margin-left: 257px;width: 584px;padding:18px;}
+.mini-detail p{margin: 15px 0;color: #888;line-height: 20px;}
+.mini-detail h4{height: 18px;font-size:14px;font-weight: bold;}
+.mini-detail .return{text-align: right;}
+.mini-detail .return a{color:#333;}
+.mini-detail .sys-form{min-height: 108px;border-bottom: 1px solid #dedddf;}
+.mini-detail .sys-form h4 span{font-size: 12px;font-weight: normal;}
+.mini-detail .sys-form h4 i{margin-left: 10px;color: #aaa;cursor: pointer;}
+.mini-detail .sys-form .mini-url input{width: 44%;margin: 0 10px 10px 0;}
+.mini-detail .mini-admin-tt{display: inline-block;}
+
+.mini-detail .mini-admin{padding:17px 0 24px 0;border-bottom: 1px solid #dedddf;}
+.mini-detail .mini-admin .tag{padding: 5px;min-height: 35px;margin-bottom: 20px;background: #FAFAFA;border: 1px solid #CCC;}
+.mini-detail .mini-admin .tag span{display:inline-block;margin:1px 7px 4px 3px;padding: 5px;background-color:#eee}
+.mini-detail .mini-admin .mini-admin-tt{margin: 20px 20px 12px 0;}
+.mini-detail .mini-admin .chkall{float: right;margin: 18px 10px 0 0;}
+.mini-detail .manage-table .table-icon {width: 27px;font-size: 18px;color: #5F97FB;}
+.mini-detail .save{margin-top: 18px;}
+
+.modalAdmin .pagination{margin:0 0;}

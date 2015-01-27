@@ -1,0 +1,127 @@
+<div class="setting-container" ng-controler="SystemMineController" ng-init="init()">
+  <aside>
+    <ul>
+        <li class="menu-item"><a href="system#/setting/list">所有管理员</a>
+        </li>
+        <li class="menu-item"><a href="system#/setting/mine">我</a></li>
+        <li class="menu-item"><a href="system#/setting/back">系统</a></li>
+    </ul>
+  </aside>
+  <div class="mine">
+      <div class="mine-item">
+          <h4>基本信息</h4>
+          <div ng-show="!isEditProfile">
+            <p>姓名：{{adminPro.name}}</p>
+            <p>微信：{{adminPro.weixin}}</p>
+          </div>
+          <div class="form-horizontal" ng-show="isEditProfile">
+            <div class="form-group">
+              <label for="" class="col-sm-2 control-label">姓名</label>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="adminEditPro.name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="" class="col-sm-2 control-label">微信</label>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="adminEditPro.weixin" placeholder="8-20位字符">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-primary" ng-click="changeUser.saveEditPro()">保存</button>
+                  <button type="submit" class="btn btn-default" ng-click="isEditProfile = false">取消</button>
+              </div>
+            </div>
+          </div>
+          <p>密码：<a href="" ng-click="changeUser.modalChangePassword()">修改密码</a></p>
+          <button class="btn btn-default change" ng-hide="isEditProfile" ng-click="changeUser.editPro()">修改</button>
+      </div>
+      <div class="mine-item">
+          <h4>账号信息</h4>
+          <div ng-if="!isEditContact">
+            <p>手机：{{adminPro.telephone}}</p>
+            <p>邮箱：{{adminPro.email}}</p>
+          </div>
+          <div class="form-horizontal" ng-show="isEditContact">
+            <div class="form-group">
+              <label for="" class="col-sm-2 control-label">手机</label>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="adminEditPro.telephone">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="" class="col-sm-2 control-label">邮箱</label>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="adminEditPro.email" placeholder="8-20位字符">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-primary" ng-click="changeUser.saveEditContact()">保存</button>
+                  <button type="submit" class="btn btn-default" ng-click="isEditContact=false">取消</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-default change" ng-click="changeUser.editContact()" ng-hide="isEditContact" >修改</button>
+      </div>
+      <div class="mine-item last">
+          <h4>已开通的权限</h4>
+          <table class="table">
+            <thead>
+              <th>序号</th>
+              <th>类型</th>
+              <th>账号名称</th>
+              <th>权限范围</th>
+              <th>角色</th>
+            </thead>
+            <tbody>
+              <tr ng-repeat="adminPower in adminPowers">
+                <td>{{adminPower.adminId}}</td>
+                <td>{{adminPower.accountType}}</td>
+                <td>{{adminPower.accountName}}</td>
+                <td>{{adminPower.power}}</td>
+                <td>{{adminPower.role}}</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+  </div>
+  <div style="clear: both"></div>
+</div>
+
+<!-- 重置密码 -->
+  <div>
+    <script type="text/ng-template" id="changePassword.html">
+        <div class="modal-header">
+            <h4 class="modal-title center">修改账号信息</h4>
+        </div>
+        <div class="modal-body"  id="changepassword">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label for="name" class="col-sm-2 control-label">旧密码</label>
+                <div class="col-sm-8">
+                  <input type="password" class="form-control" ng-model="repassword.old" placeholder="请输入">
+                </div>
+                <label for="name" class="col-sm-2 control-label errorPassword" ng-if="isShowErrorPassword">密码错误</label>
+              </div>
+              <div class="form-group">
+                <label for="phone" class="col-sm-2 control-label">新密码</label>
+                <div class="col-sm-8">
+                  <input type="password" class="form-control" ng-model="repassword.new1" placeholder="8-20个字符">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="email" class="col-sm-2 control-label">确认密码</label>
+                <div class="col-sm-8">
+                  <input type="password" class="form-control" ng-model="repassword.new2" placeholder="">
+                </div>
+              </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" type="submit" ng-if="!isEditAdmin" ng-click="changePassword.postPassword()">确定</button> 
+          <button class="btn btn-default" ng-click="cancelModal()">取消</button>    
+        </div>
+    </script>
+  </div>

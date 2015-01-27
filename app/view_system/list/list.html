@@ -1,0 +1,156 @@
+<div class="setting-container" ng-controler="SystemListController" ng-init="init()">
+  <aside>
+    <ul>
+        <li class="menu-item"><a href="system#/setting/list">所有管理员</a>
+        </li>
+        <li class="menu-item"><a href="system#/setting/mine">我</a></li>
+        <li class="menu-item"><a href="system#/setting/back">系统</a></li>
+    </ul>
+  </aside>
+  <div class="list-content">
+      <div class="setting-list">
+         <table class="table">
+            <caption class="list-head">
+             <span>管理员上限：100 已激活：1 - </span>
+             <button class="btn btn-sm btn-default" ng-click="sysListClass.modalEditAdmin()">+添加管理员</button>
+             <div class="setting-search f-fr">
+                <div class="form-inline search-group">
+                  <input type="text" class="form-control" ng-model="search_text"  ng-keypress="sysListClass.chkSearch($event,search_text)"  placeholder="姓名/手机/邮箱/微信">
+               </div> 
+               <span class="glyphicon glyphicon-search" ng-click="sysListClass.getAdminList(search_text)"></span>
+             </div>                 
+            </caption>
+            <thead>
+                <tr>
+                  <th>ID</th>
+                  <th class="name">姓名</th>
+                  <th>手机</th>
+                  <th>邮箱</th>
+                  <th>微信</th>
+                  <th class="join-date">加入日期</th>
+                  <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+              <tr class="setting-item" ng-repeat="adminItem in adminList">
+                  <td class="id">{{adminItem.id}}</td>
+                  <td>{{adminItem.nickName}}</td>
+                  <td>{{adminItem.cellphone}}</td>
+                  <td>{{adminItem.email}}</td>
+                  <td>{{adminItem.weixin}}</td>
+                  <td>{{adminItem.createTime | date:'yyyy-MM-dd'}}</td>
+                  <td class="last">
+                    <div class="setting-ctr">
+                      <span ng-click="sysListClass.hisPromise(adminItem.id)">Ta的权限</span>-
+                      <span ng-click="sysListClass.modalEditAdmin(adminItem)">修改信息</span>-
+                      <span ng-click="modalAll.resetPw(adminItem)">重置密码</span>   
+                    </div>
+                    <div class="system-status f-db" ng-class="{'permission-on': adminItem.active, 'permission-off': !adminItem.active}">
+                        <toggle-switch ng-model="adminItem.active" ng-click="sysListClass.chkActive(adminItem)"></toggle-switch>
+                    </div>
+                  </td>
+              </tr>
+            </tbody>
+         </table>
+         <div class="pageview">
+             <pagination
+                  ng-change="pageChanged()"
+                  total-items="totalItems"
+                  ng-model="currentPage"
+                  max-size="5"
+                  items-per-page="maxSize"
+                  class="pagination-sm"
+                  boundary-links="true"
+                  rotate="false"
+                  previous-text="&lsaquo;"
+                  next-text="&rsaquo;"
+                  first-text="&laquo;"
+                  last-text="&raquo;"
+                  >
+             </pagination>
+         </div>
+      </div>
+  </div>
+  <div style="clear: both"></div>
+</div>
+
+    <!-- 添加修改管理员 -->
+    <div id="editAdmin">
+        <script type="text/ng-template" id="editAdmin.html">
+            <div class="modal-header">
+                <h4 class="modal-title center">{{isEditAdmin?'修改':'添加'}}管理员</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">姓名</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="name" ng-model="newAdmin.nickName" placeholder="请输入">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="phone" class="col-sm-2 control-label">手机</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="phone" ng-model="newAdmin.cellphone" placeholder="">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="email" class="col-sm-2 control-label">邮箱</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="email" ng-model="newAdmin.email" placeholder="">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="wechat" class="col-sm-2 control-label">微信</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="wechat" ng-model="newAdmin.weixin" placeholder="选填">
+                    </div>
+                  </div>
+                  <div class="form-group" ng-if="isEditAdmin">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="newAdmin.reset">重置密码
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" ng-if="!isEditAdmin" ng-click="createAdmin()">确定</button>
+              <button class="btn btn-primary" ng-if="isEditAdmin" ng-click="updateAdmin()">保存</button>  
+              <button class="btn btn-default" ng-click="cancelModal()">取消</button>    
+            </div>
+        </script>
+    </div>
+
+
+    <!-- Ta的权限 -->
+    <div id="hispromise">
+        <script type="text/ng-template" id="hispromise.html">
+            <div class="modal-header">
+                <h4 class="modal-title center">Ta的权限</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <td>类型</td>
+                        <td>账号名称</td>
+                        <td>权限范围</td>
+                        <td>角色</td>
+                      </tr>
+                    </thead>
+                  <tbody>
+                    <tr class="f-cp" ng-repeat="item in powerList" ng-click="changeAdminList(item,$index)">
+                      <td ng-bind="item.accountType"></td>
+                      <td ng-bind="item.accountName"></td>
+                      <td ng-bind="item.power"></td>
+                      <td ng-bind="item.role"></td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+        </script>
+    </div>

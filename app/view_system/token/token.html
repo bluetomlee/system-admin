@@ -1,0 +1,52 @@
+<div class="setting-container" ng-controler="SystemTokenController" ng-init="init()">
+  <div class="token-fail"  ng-if="isShowTokenPw">
+      <p><i class="fa fa-exclamation-circle"></i></p>
+      <p>验证失败</p>
+      <p>链接已过期，请管理员重置密码</p>
+  </div>
+  <form class="form-horizontal token-success" role="form">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">设置密码</label>
+    <div class="col-sm-3">
+      <input type="email" class="form-control" ng-model="newPw" placeholder="8-20位字符">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+    <div class="col-sm-3">
+      <input type="password" class="form-control" ng-model="newPw2" placeholder="8-20位字符">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" ng-disable="newPw != newPw2" ng-click="saveNewPw">确定</button>
+    </div>
+  </div>
+</form>
+  <form class="form-horizontal token-success" role="form">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">旧密码</label>
+    <div class="col-sm-3">
+      <input type="email" class="form-control" ng-model="oldPw" placeholder="8-20位字符">
+    </div>
+  </div>  
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">设置密码</label>
+    <div class="col-sm-3">
+      <input type="email" class="form-control" ng-model="newPw" placeholder="8-20位字符">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">密码确认</label>
+    <div class="col-sm-3">
+      <input type="password" class="form-control" ng-model="newPw2" placeholder="8-20位字符">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" ng-disable="newPw != newPw2" ng-click="saveNewPw">确定</button>
+    </div>
+  </div>
+</form>
+  <div style="clear: both"></div>
+</div>

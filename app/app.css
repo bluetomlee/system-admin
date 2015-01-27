@@ -1,0 +1,215 @@
+.team {
+    font-family: 'Microsoft YaHei',sans-serif
+}
+
+.team input[type=number]::-webkit-inner-spin-button,.team input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0
+}
+
+.team ::-webkit-input-placeholder {
+    font-size: 12px
+}
+
+.team a {
+    color: #0099ff
+}
+
+.team a:hover {
+    color: #0099ff
+}
+
+.team label {
+    cursor: auto;
+    font-weight: bold;
+    line-height: 2em
+}
+.team .btn-large {
+    font-size: 16px
+}
+
+.team select {
+    font-size: 12px;
+    font-family: 'Microsoft YaHei',sans-serif;
+    border-radius: 0
+}
+
+.team .wrapper-app {
+    padding-top: 50px
+}
+
+.team .container-app {
+    width: 960px;
+    min-height: 640px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+}
+
+.team .container-app .header-app {
+    padding: 35px 20px 20px 0;
+    font-size: 36px;
+    line-height: 1em;
+    text-align: center;
+    padding-bottom: 15px;
+}
+.team .container-app .navigation{
+
+    border-top:1px solid #d7d7d7; 
+    border-bottom:1px solid #d7d7d7; 
+    background: #f9f9f9;
+}
+.team .container-app .navigation a{
+    color:#333;
+}
+.team .container-app .navigation span{
+    display: inline-block;
+    line-height: 42px;
+    padding: 0px 44px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+.team .container-app .navigation span:hover{
+    background: #eee;
+}
+.team .container-app .header-app .success {
+    color: #006600
+}
+
+.team .container-app .header-app .account {
+    color: #ccc;
+    font-size: 12px;
+    line-height: 1em;
+    text-align: right
+}
+
+.team .container-app .header-app .account a:hover {
+    text-decoration: none
+}
+
+.team .container-app .alert-pane {
+    text-align: center;
+    background: #ffffcc;
+    border: 1px solid #ffcc99;
+    padding: 10px 0;
+    margin-top: 20px
+}
+
+.team .container-app .alert-pane .bold {
+    font-weight: bold
+}
+
+.team .container-app .alert-pane .grey {
+    color: #999
+}
+
+.team .container-app .alert-pane p:last-child {
+    margin-bottom: 0px
+}
+
+.team .container-app .links-pane {
+    text-align: center
+}
+
+.team .container-app .links-pane p {
+    margin: 20px 0
+}
+
+.team .container-app .links-pane a:hover {
+    text-decoration: none
+}
+
+.team .container-app .form-app {
+    padding-top: 40px
+}
+
+.team .container-app .form-app form {
+    margin-left: 250px
+}
+
+.team .container-app .form-app form .err-message,.team .container-app .form-app form .error-message {
+    font-size: 12px
+}
+
+.team .container-app .form-app .create-form select {
+    width: 90px;
+    margin-right: 10px
+}
+
+.team .container-app .form-app .create-form .category-select {
+    line-height: 1em;
+    margin-bottom: 10px;
+    display: inline-block
+}
+
+.team .container-app .form-app .create-form .category-select:hover {
+    text-decoration: none
+}
+
+.team .container-app .form-app .create-form .select-cats {
+    font-weight: bold
+}
+
+.team .container-app .search-team {
+    padding-top: 20px
+}
+
+.team .container-app .search-team .form-search {
+    margin-left: 260px
+}
+
+.team .container-app .search-team .search-query {
+    height: 20px;
+    margin-bottom: 0px;
+    border-radius: 15px
+}
+
+.team .container-app .select-pane .team-icon {
+    width: 214px;
+    height: 60px;
+    padding: 15px;
+    border: 1px solid #d7d7d7;
+    border-radius: 4px;
+    margin: 20px 10px 0 10px;
+    float: left;
+    cursor: pointer;
+    box-shadow: 1px 1px 6px rgba(0,0,0,0.05)
+}
+
+.team .container-app .select-pane .team-icon .team-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px
+}
+
+.team .container-app .select-pane .team-icon .weixin {
+    color: #666
+}
+
+.team .container-app .select-pane .team-icon .weibo {
+    color: #666
+}
+
+.team .container-app .select-pane .team-icon:hover {
+    background: #f9f9f9
+}
+
+footer {
+    color: #999;
+    line-height: 1em;
+    text-align: center;
+    padding: 20px 0 10px 0
+}
+
+/* modal美化 */
+.modal-header h4{font-size:14px;}
+
+
+/* css function */
+.f-fl{float: left;}
+.f-db{display: inline-block;}
+.f-fr{float: right;}
+.f-cp{cursor: pointer;}
+.s-tc{text-align: center;}
+.s-tl{text-align: left;}
+.s-tr{text-align: right;}

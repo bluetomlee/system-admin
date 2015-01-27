@@ -1,0 +1,293 @@
+    <div class="mini-container" ng-controler="MiNiAdminController">
+     <div class="group-tree">
+        <div app-setting-admin-list selected-node="node" selected-node-changed="nodeChangedPromise" class="lf-menu-view"></div>
+     </div>
+      <div class="mini-detail">
+      		<div class="return"><a href="system#/vs"><<返回</a></div>
+            <div class="sys-form" ng-init="isShowSysInput=false">
+            <h4 ng-show="!isShowSysInput" ng-mouseenter="isShowSysName=true" ng-mouseleave="isShowSysName=false">{{miniAdmin.name}} <span>{{miniAdmin.homepage}}</span> 
+            <i ng-if="isShowSysName && (teamSuperAdmin || clientSuperAdmin)" ng-click="$parent.isShowSysInput=true" class="fa fa-pencil"></i></h4>
+              <div class="form-inline mini-url" ng-show="isShowSysInput">
+                <input type="text" class="form-control" ng-model="miniAdmin.name">
+                <input type="text" class="form-control" ng-model="miniAdmin.homepage">
+              </div>
+              <p class="contxt" ng-show="!isShowSysInput" ng-bind="miniAdmin.description"></p>
+              <div class="form-group sys-depict" ng-show="isShowSysInput">
+                <input type="text" class="form-control" ng-model="miniAdmin.description">
+              </div>
+              <div class="form-group" ng-show="isShowSysInput">
+                  <button class="btn btn-primary" ng-click="updateMiniInfor()">保存</button>
+                  <button class="btn btn-default" ng-click="isShowSysInput=false">取消</button>
+              </div>
+            </div>
+	         <div class="mini-admin">
+	         	<h4 class="mini-admin-tt">管理员</h4><a href="javascript:" ng-click="modalChangeAdmin()">修改</a>
+	         	<div class="tag"><span ng-repeat="tag in selectedTags">{{tag.nickName}}</span></div>	
+	         	<h4 class="mini-admin-tt" ng-if="!isShowAdminRemind">权限表</h4>
+	         	<div class="chkall" ng-if="!isShowAdminRemind"><input type="checkbox" ng-model="promiseGroupChecked" ng-click="promiseGroupCheck(promiseGroupChecked)">全选</div>
+                <div ng-if="isShowAdminRemind">
+                    <h4>权限范围</h4>
+                    <p>即minisite的超级管理员，拥有此minisite在VS中的所有权限，以及在SIM中的配置权限。</p>
+                </div>
+                <div class="manage-table" ng-if="!isShowAdminRemind">
+                    <table class="table table-bordered">
+                    	<tbody>
+                        <tr>
+                            <td rowspan="15"><i class="fa fa-newspaper-o table-icon"></i>CMS</td>
+                            <td>内容类型管理</td>
+                            <td><input ng-model="permissionsGroup[458]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>内容栏目管理</td>
+                            <td><input ng-model="permissionsGroup[459]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>内容菜单管理</td>
+                            <td><input ng-model="permissionsGroup[460]" type="checkbox"/></td>
+                        </tr>
+
+                        <tr>
+                            <td>热点视频管理</td>
+                            <td><input ng-model="permissionsGroup[461]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>品牌信息管理</td>
+                            <td><input ng-model="permissionsGroup[462]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>内容管理</td>
+                            <td><input ng-model="permissionsGroup[463]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>站点管理</td>
+                            <td><input ng-model="permissionsGroup[464]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY内容栏目管理</td>
+                            <td><input ng-model="permissionsGroup[465]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY内容菜单管理</td>
+                            <td><input ng-model="permissionsGroup[466]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY热点视频管理</td>
+                            <td><input ng-model="permissionsGroup[467]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY品牌信息管理</td>
+                            <td><input ng-model="permissionsGroup[468]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY内容管理</td>
+                            <td><input ng-model="permissionsGroup[469]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY站点管理</td>
+                            <td><input ng-model="permissionsGroup[470]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>推荐内容管理</td>
+                            <td><input ng-model="permissionsGroup[471]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>查看热点内容</td>
+                            <td><input ng-model="permissionsGroup[472]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4"><i class="fa fa-bar-chart-o table-icon"></i>Report</td>
+                            <td>查看常用报表</td>
+                            <td><input ng-model="permissionsGroup[478]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>查看自定义报表</td>
+                            <td><input ng-model="permissionsGroup[479]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>查看TP Log</td>
+                            <td><input ng-model="permissionsGroup[480]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY查看TP Log</td>
+                            <td><input ng-model="permissionsGroup[481]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5"><i class="fa fa-male table-icon"></i>运营管理</td>
+                            <td>查看互动日志</td>
+                            <td><input ng-model="permissionsGroup[488]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>查看互动数据</td>
+                            <td><input ng-model="permissionsGroup[489]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>互动管理</td>
+                            <td><input ng-model="permissionsGroup[490]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY查看互动数据</td>
+                            <td><input ng-model="permissionsGroup[491]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY互动管理</td>
+                            <td><input ng-model="permissionsGroup[492]" type="checkbox"/></td>
+                        </tr>
+
+                        <!--菜单-->
+                        <tr>
+                            <td rowspan="4"><i class="fa fa-photo table-icon"></i>模板管理</td>
+                            <td>模板管理</td>
+                            <td><input ng-model="permissionsGroup[498]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>选择模板</td>
+                            <td><input ng-model="permissionsGroup[499]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>查看模板审核记录</td>
+                            <td><input ng-model="permissionsGroup[500]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>模板审核管理</td>
+                            <td><input ng-model="permissionsGroup[501]" type="checkbox"/></td>
+                        </tr>
+
+                        <!--数据-->
+                        <tr>
+                            <td rowspan="5"><i class="fa fa-reorder table-icon"></i>HCP Profile</td>
+                            <td>查看HCP互动数据</td>
+                            <td><input ng-model="permissionsGroup[513]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>查看HCP互动数据详细</td>
+                            <td><input ng-model="permissionsGroup[514]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY查看HCP互动数据</td>
+                            <td><input ng-model="permissionsGroup[515]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>DXY查看HCP互动数据详细</td>
+                            <td><input ng-model="permissionsGroup[516]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>查看HCP登陆日志</td>
+                            <td><input ng-model="permissionsGroup[517]" type="checkbox"/></td>
+                        </tr>
+                        <!--设置-->
+                        <tr>
+                            <td rowspan="2"><i class="fa fa-dashboard table-icon"></i>Dashboard</td>
+                            <td>Engaged Target HCP</td>
+                            <td><input ng-model="permissionsGroup[522]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>Touch Point</td>
+                            <td><input ng-model="permissionsGroup[523]" ng-change="promiseGroupSelect(297,298)" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-comments table-icon"></i>评论管理</td>
+                            <td>评论管理</td>
+                            <td><input ng-model="permissionsGroup[524]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><i class="fa fa-edit table-icon"></i>答题管理</td>
+                            <td>模式管理</td>
+                            <td><input ng-model="permissionsGroup[532]" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>题库管理</td>
+                            <td><input ng-model="permissionsGroup[533]" ng-change="promiseGroupSelect(297,298)" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td>答题成绩</td>
+                            <td><input ng-model="permissionsGroup[534]" ng-change="promiseGroupSelect(297,298)" type="checkbox"/></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-cubes table-icon"></i>成长计划</td>
+                            <td>成长计划</td>
+                            <td><input ng-model="permissionsGroup[542]" type="checkbox"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>	         	
+	         	
+	         </div>
+	         <div class="save">
+	         	<button class="btn btn-primary" ng-click="saveMenu()">保存</button>
+	         </div>	
+      </div>    
+    <div style="clear: both"></div>
+</div>
+
+<!-- 修改管理员 -->
+    <div id="modalAdmin">
+        <script type="text/ng-template" id="changeAdminList.html">
+            <div class="modal-header">
+                <h4 class="modal-title center">修改管理员</h4>
+            </div>
+            <div class="modal-body" ng-init="showAdminList()">
+                <div class="adminTags form-group">
+                        <tags-input
+                        ng-model="selectedTags"
+                        min-length="1"
+                        display-property="nickName"
+                        add-on-enter="false"
+                        add-on-space="false"
+                        add-on-comma="false"
+                        add-on-blur="false"
+                        on-tag-added="tagAdd($tag)"
+                        on-tag-removed="removeAdminTag($tag)"
+                        placeholder="输入空格或名称查找"
+                        >
+                        <auto-complete min-length="1" source="loadAdminList($query)"></auto-complete>
+                    </tags-input>
+                </div>
+                <table class="table table-striped">
+                		<caption>
+	                		<i class="fa fa-user"></i>
+	                		<h5 class="f-db">管理员</h5>
+	                		<span>（管理员需要先添加，才能被选择)</span>
+                		</caption>
+	                	<thead>
+	                		<tr>
+	                			<td>ID</td>
+	                			<td>姓名</td>
+	                			<td>手机</td>
+	                			<td>邮箱</td>
+	                			<td></td>
+	                		</tr>
+                		</thead>
+                	<tbody>
+                		<tr class="f-cp" ng-repeat="item in adminList" ng-click="changeAdminList(item,$index)">
+                			<td ng-bind="item.id"></td>
+                			<td ng-bind="item.nickName"></td>
+                			<td ng-bind="item.cellphone"></td>
+                			<td ng-bind="item.email"></td>
+                			<!--<td><input ng-model="item.show" type="checkbox"/></td>-->
+                		</tr>
+                	</tbody>
+                </table>
+                <div class="pageview">
+                    <pagination
+                            ng-change="pageChanged()"
+                            total-items="totalItems"
+                            ng-model="currentPage"
+                            max-size="3"
+                            items-per-page="maxSize"
+                            class="pagination-sm"
+                            boundary-links="true"
+                            rotate="false"
+                            previous-text="&lsaquo;"
+                            next-text="&rsaquo;"
+                            first-text="&laquo;"
+                            last-text="&raquo;"
+                            >
+                    </pagination>
+                </div>
+            </div>
+            <div class="modal-footer">
+            	<button class="btn btn-primary" ng-click="saveTags(selectedTags)">确定</button>
+				<button class="btn btn-default" ng-click="cancelModal()">取消</button>		
+            </div>
+        </script>
+    </div>
