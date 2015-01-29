@@ -38,15 +38,15 @@
                   <td>{{adminItem.cellphone}}</td>
                   <td>{{adminItem.email}}</td>
                   <td>{{adminItem.weixin}}</td>
-                  <td>{{adminItem.createTime | date:'yyyy-MM-dd'}}</td>
+                  <td>{{adminItem.createTime.substring(0,10)}}</td>
                   <td class="last">
                     <div class="setting-ctr">
                       <span ng-click="sysListClass.hisPromise(adminItem.id)">Ta的权限</span>-
                       <span ng-click="sysListClass.modalEditAdmin(adminItem)">修改信息</span>-
                       <span ng-click="modalAll.resetPw(adminItem)">重置密码</span>   
                     </div>
-                    <div class="system-status f-db" ng-class="{'permission-on': adminItem.active, 'permission-off': !adminItem.active}">
-                        <toggle-switch ng-model="adminItem.active" ng-click="sysListClass.chkActive(adminItem)"></toggle-switch>
+                    <div class="system-status f-db" ng-class="{'permission-on': adminItem.active, 'permission-off': !adminItem.active}" ng-click="sysListClass.chkActive(adminItem)">
+                        <toggle-switch ng-model="adminItem.active"></toggle-switch>
                     </div>
                   </td>
               </tr>
@@ -129,7 +129,7 @@
     <!-- Ta的权限 -->
     <div id="hispromise">
         <script type="text/ng-template" id="hispromise.html">
-            <div class="modal-header">
+            <div class="modal-header" ng-init="hisPromiseList()">
                 <h4 class="modal-title center">Ta的权限</h4>
             </div>
             <div class="modal-body">
@@ -151,6 +151,23 @@
                     </tr>
                   </tbody>
                 </table>
+                <div class="pageview">
+                    <pagination
+                            ng-change="pageChanged()"
+                            total-items="totalItems"
+                            ng-model="currentPage"
+                            max-size="3"
+                            items-per-page="maxSize"
+                            class="pagination-sm"
+                            boundary-links="true"
+                            rotate="false"
+                            previous-text="&lsaquo;"
+                            next-text="&rsaquo;"
+                            first-text="&laquo;"
+                            last-text="&raquo;"
+                            >
+                    </pagination>
+                </div>
             </div>
         </script>
     </div>

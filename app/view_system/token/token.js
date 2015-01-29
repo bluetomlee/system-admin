@@ -5,7 +5,8 @@ var systoken_modal = angular.module('systemApp.token', ['ui.bootstrap', 'cgPromp
      function($scope, $http, $routeParams, $rootScope, $timeout, $modal, prompt, notify){
 
      	$scope.init = function(){
-     		// $scope.chkToken();
+            $scope.token = $routeParams.token;
+     		$scope.chkToken();
      	};
 
      	$scope.chkToken = function(){
@@ -13,14 +14,17 @@ var systoken_modal = angular.module('systemApp.token', ['ui.bootstrap', 'cgPromp
      			url: '/japi/smanage/check/token',
      			method: 'POST',
      			data: $.param({
-     				userId: userId,
-     				token: token,
-     				status: status
+     				token: $scope.token,
+     				status: 1
      			}),
      			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
      		}).success(function(data){
-     			if (data.success) {
-     				$scope.TokenPw = data.items;
+     			if(data.success) {
+     				$scope.newToken = {
+                        userId: data.userId,
+                        token: data.token
+                    };
+                    console.log($scope.newToken);
      			};
      		})
      	};
@@ -34,7 +38,7 @@ var systoken_modal = angular.module('systemApp.token', ['ui.bootstrap', 'cgPromp
      				password1: $scope.newPw,
      				password2: $scope.newPw2,
      				token: token,
-     				status: status
+     				status: 2
         		}),
         		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         	}).success(function(data){

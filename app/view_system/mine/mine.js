@@ -45,22 +45,12 @@ var sysmine_modal = angular.module('systemApp.mine', ['ui.bootstrap', 'cgPrompt'
                 $scope.adminEditPro = angular.copy($scope.adminPro);
                 $scope.isEditProfile = true;
             },
-            saveEditContact : function(){
-                $http({
-                    method: 'POST',
-                    url:'/japi/smanage/update/accountinfo',
-                    data: $.param({
-                        name: $scope.adminEditPro.telephone,
-                        weixin: $scope.adminEditPro.email
-                    }),
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).success(function(data){
-                    $scope.remindInfor(data);
-                })
-            },
             editContact: function(){
-                $scope.adminEditPro = angular.copy($scope.adminPro);
-                $scope.isEditContact = true;
+                var showEditContact = $modal.open({
+                    templateUrl: 'editContact.html',
+                    scope: $scope,
+                    controller: 'SystemMineModalController'
+                })
             },
             modalChangePassword: function(){
                 var showRepassword = $modal.open({
@@ -111,6 +101,42 @@ var sysmine_modal = angular.module('systemApp.mine', ['ui.bootstrap', 'cgPrompt'
 sysmine_modal.controller('SystemMineModalController',['$scope', '$http', '$modal','$timeout','$modalInstance','notify',
         function($scope, $http, $modal, $timeout, $modalInstance, notify){
 
+            $scope.adminEditProfile = {
+                init: function(){
+                    $scope.adminEditPro = angular.copy($scope.adminPro);
+                },
+                next: function(){
+                    $http({
+                        method: 'POST',
+                        url: '/japi/smanage/check/password',
+                        data: $.param({
+                            password: $scope.adminEditPro.password
+                        }),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).success(function(data){
+                        if(data.success){
+                            $scope.isShowEditPro2 = true;
+                        }else{
+                            $scope.remindInfor(data);
+                        };
+                    })
+                    
+                },
+                saveEditContact : function(){
+                    console.log($scope.adminEditPro);
+                    $http({
+                        method: 'POST',
+                        url:'/japi/smanage/update/accountinfo',
+                        data: $.param({
+                            telephone: $scope.adminEditPro.telephone,
+                            email: $scope.adminEditPro.email
+                        }),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).success(function(data){
+                        $scope.remindInfor(data);
+                    })
+                }
+            }
             $scope.changePassword = {
                 chkPassword: function(){
                     console.log($scope.repassword);

@@ -125,3 +125,38 @@
         </div>
     </script>
   </div>
+<!-- 添加修改管理员 -->
+  <div id="editContact">
+      <script type="text/ng-template" id="editContact.html">
+          <div class="modal-header">
+              <h4 class="modal-title center">修改账号信息</h4>
+          </div>
+          <div class="modal-body" ng-init="adminEditProfile.init()">
+              <form class="form-horizontal" role="form">
+                <div class="form-group" ng-hide="isShowEditPro2">
+                  <label for="name" class="col-sm-2 control-label">账号密码</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" ng-model="adminEditPro.password" placeholder="请输入">
+                  </div>
+                </div>
+                <div class="form-group" ng-show="isShowEditPro2">
+                  <label for="phone" class="col-sm-2 control-label">手机</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="phone" ng-model="adminEditPro.telephone" placeholder="">
+                  </div>
+                </div>
+                <div class="form-group" ng-show="isShowEditPro2">
+                  <label for="email" class="col-sm-2 control-label">邮箱</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="email" ng-model="adminEditPro.email" placeholder="">
+                  </div>
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="adminEditProfile.next()" ng-hide="isShowEditPro2">下一步</button>
+            <button class="btn btn-primary" ng-click="adminEditProfile.saveEditContact()" ng-if="isShowEditPro2">保存</button>  
+            <button class="btn btn-default" ng-click="cancelModal()">取消</button>    
+          </div>
+      </script>
+  </div>

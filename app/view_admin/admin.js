@@ -18,7 +18,6 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
             $scope.appId = $routeParams.appId;
             $scope.refreshMiniAdmin();
             $scope.$watch('permissionsGroup', function(newVal, oldVal) {
-                console.info($scope.permissionsGroup)
                 var count = 0;
                 angular.forEach(newVal, function(value, key) {
                     if(value) {
@@ -184,8 +183,6 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
         $scope.nodeChangedPromise = function(newNode) {
             grantData.id = parseInt(newNode.subid);
             $scope.newNode = newNode;
-            // console.info(grantData)
-            console.info(newNode);
             owerFunc.setSelectedTags(newNode);
             owerFunc.setPermissionsGroup(newNode);
             $scope.promiseChk = false;
@@ -264,8 +261,7 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
             console.info(grantData, $scope.selectedTags)
             grantData.resourceIds = owerFunc.formatPermiseGroup($scope.permissionsGroup);
             grantData.userIds = owerFunc.formatAdminList($scope.selectedTags);
-            console.log(grantData.userIds,$scope.selectedTags)
-            console.info($scope.teamSuperAdmin,$scope.newNode);
+            $scope.newNode.item.resourceIds = grantData.resourceIds.split(",");
             var superAdmins = owerFunc.formatAdminList($scope.selectedTags),
                 teamSuperAjax = function(){
                     return $http({
@@ -290,7 +286,7 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
                             }),
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function(data){
-                            $scope.remindInfor(data)
+                            $scope.remindInfor(data);
                         });                         
                     }
                    
@@ -305,6 +301,7 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
                     });                   
                 })
             }
+
         }
 
 }]);

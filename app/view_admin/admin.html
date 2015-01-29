@@ -21,7 +21,7 @@
               </div>
             </div>
 	         <div class="mini-admin">
-	         	<h4 class="mini-admin-tt">管理员</h4><a href="javascript:" ng-click="modalChangeAdmin()">修改</a>
+	         	<h4 class="mini-admin-tt">管理员</h4><a href="javascript:" ng-hide="applicationSuperAdmin && newNode.text == '超级管理员'" ng-click="modalChangeAdmin()">修改</a>
 	         	<div class="tag"><span ng-repeat="tag in selectedTags">{{tag.nickName}}</span></div>	
 	         	<h4 class="mini-admin-tt" ng-if="!isShowAdminRemind">权限表</h4>
 	         	<div class="chkall" ng-if="!isShowAdminRemind"><input type="checkbox" ng-model="promiseGroupChecked" ng-click="promiseGroupCheck(promiseGroupChecked)">全选</div>

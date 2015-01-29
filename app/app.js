@@ -27,7 +27,7 @@ var systemApp_module = angular.module('systemApp', [
                 templateUrl: '/static/v1/system/app/view_system/list/list.html',
                 controller: 'SystemListController'
             })
-            .when('/setting/token',{
+            .when('/setting/token/:token',{
                 templateUrl: '/static/v1/system/app/view_system/token/token.html',
                 controller: 'SystemTokenController'
             })
@@ -77,7 +77,7 @@ angular.module('systemApp.global',['ngRoute','cgPrompt'])
                     "appName": $location.path(),
                     "appId": "",
                     "requestSimconfis": function(){
-                        $http.get('/japi/team/select?id=136');
+                        // $http.get('/japi/team/select?id=136');
                         var url = '/japi/js/configs';
                         return $http.get(url);
                     },
@@ -87,7 +87,7 @@ angular.module('systemApp.global',['ngRoute','cgPrompt'])
                         var promise = self.requestSimconfis();
                         if(!$scope.clientSuperAdmin && !$scope.teamSuperAdmin && !$scope.applicationSuperAdmin){
                             var name = $location.path().substring(1,6);
-                            // (name == 'admin') && self.locateNopermission();                               
+                            (name == 'admin') && self.locateNopermission();                               
                         }
                         console.log($scope.clientSuperAdmin, $scope.teamSuperAdmin, $scope.applicationSuperAdmin);
                         

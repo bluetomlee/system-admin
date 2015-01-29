@@ -53,7 +53,6 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
                 url = '/japi/smanage/client/list?' + $.param($scope.objPage);
                 $http.get(url).success(function(data){
                     $scope.adminList = data.items;
-                    angular.forEach()
                     $scope.setPagination(data.pageBean.count, data.pageBean.current, 10);
                 });
             },
@@ -61,7 +60,7 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
             // switch切换
             chkActive: function(user) {
                 console.log(user);
-                (user.active) ? $scope.modalAll.disableAdmin(user.id) : $scope.modalAll.activeAdmin(user.id);  
+                (!user.active) ? $scope.modalAll.disableAdmin(user.id) : $scope.modalAll.activeAdmin(user.id);  
             },
 
             active: function(userId,bool){
@@ -72,7 +71,7 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
                         userId: userId,
                         active: bool 
                     }),
-                    headers:{'Content-Type':'x-www-form-urlencoded'}
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function(data){
                     $scope.remindInfor(data);
                 })
@@ -85,14 +84,17 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
 
             // 弹出层--Ta的权限
             hisPromise: function(id) {
-                $http.get('/japi/smanage/user/power?userId=' + id).success(function(data){
-                    $scope.powerList = data.items;
-                    var editAdmin = $modal.open({
-                        templateUrl: 'hispromise.html',
-                        scope: $scope,
-                        controller: 'SystemListModalController' 
-                    })                  
-                })
+                var editAdmin = $modal.open({
+                    templateUrl: 'hispromise.html',
+                    scope: $scope,
+                    controller: 'SystemListModalController',
+                    resolve: {
+                        items: function(){
+                            return id;
+                        }
+                    } 
+                });
+               
             },
 
             // 弹出层--添加、编辑管理员
@@ -108,8 +110,23 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
                 var editAdmin = $modal.open({
                     templateUrl: 'editAdmin.html',
                     controller: 'SystemListModalController',
-                    scope: $scope
+                    scope: $scope,
+                    resolve: {
+                        items:function(){
+                            return user;
+                        }
+                    }
                 });
+            },
+            repassword: function(admin){
+                return $http({
+                        method: 'POST',
+                        url: '/japi/smanage/send/repassword',
+                        data: $.param({
+                            'userId': admin.id
+                        }),
+                       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    })
             }
         };
 
@@ -159,15 +176,8 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
                         {label:'取消',cancel:true}
                     ]
                 }).then(function(result){
-                    $http({
-                        method: 'POST',
-                        url: '/japi/smanage/send/repassword',
-                        data: $.param({
-                            'userId': admin.id
-                        }),
-                       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                    }).success(function(data){
-                        $scope.remindInfor(data);
+                    $scope.sysListClass.repassword(admin).then(function(rep){
+                        $scope.remindInfor(rep.data);
                     })
                 })
             },
@@ -182,7 +192,9 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
                         {label:'取消',cancel:true}
                     ]
                 }).then(function(result){
-                    $scope.publishMenu(data.id);
+                    $scope.sysListClass.repassword(admin).then(function(rep){
+                        $scope.remindInfor(rep.data);
+                    })
                 })
             },
             activeAdmin: function(userId){
@@ -215,9 +227,38 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
 
 }]);
 
-syslist_modal.controller('SystemListModalController',['$scope', '$http', '$modal','$timeout','$modalInstance','notify',
-		function($scope, $http, $modal, $timeout, $modalInstance, notify){
+syslist_modal.controller('SystemListModalController',['$scope', '$http', '$modal','$timeout','$modalInstance','notify','items',
+		function($scope, $http, $modal, $timeout, $modalInstance, notify, items){
 
+            // 分页
+            $scope.setPage = function (pageNo) {
+                $scope.currentPage = pageNo;
+            };
+            $scope.pageChanged = function() {
+                console.log('Page changed to: ' + $scope.currentPage);
+                $scope.hisPromiseList();
+            };
+            $scope.setPagination = function(totalItems, currentPage, size) {
+                $scope.totalItems = totalItems;
+                $scope.currentPage = currentPage;
+                $scope.maxSize = size;
+                console.log($scope.currentPage, $scope.maxSize = size);
+            };
+            $scope.hisPromiseList = function(){
+                    $scope.objPage = {
+                        userId: items,
+                        page: $scope.currentPage || 1,
+                        size: $scope.maxSize || 10
+                    };
+                    $http.get('/japi/smanage/user/power?' + $.param($scope.objPage)).success(function(data){
+                        var tmp = [],
+                            bool = !angular.isArray(data.items);
+                        (bool) && (tmp.push(data.items));
+                        $scope.powerList = bool ? tmp : data.items;
+                        $scope.setPagination(data.pageBean.count, data.pageBean.current, 10);
+                    })
+                
+            };
             $scope.createAdmin = function(){
                 $http({
                     method: 'POST',
@@ -232,11 +273,14 @@ syslist_modal.controller('SystemListModalController',['$scope', '$http', '$modal
                 }).success(function(data){
                     $scope.remindInfor(data);
                     $scope.cancelModal();
+                    $scope.sysListClass.initAdminList();
                 })
             };
 
             $scope.updateAdmin = function(){
-                $scope.modalAll.resetPw($scope.newAdmin);
+                if($scope.newAdmin.reset){
+                     $scope.modalAll.resetPw($scope.newAdmin);
+                }
                 $http({
                     method: 'POST',
                     url: '/japi/smanage/update/admin',
@@ -251,6 +295,7 @@ syslist_modal.controller('SystemListModalController',['$scope', '$http', '$modal
                 }).success(function(data){
                     $scope.remindInfor(data);
                     $scope.cancelModal();
+                    $scope.sysListClass.initAdminList();
                 })
             };
 
