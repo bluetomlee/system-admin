@@ -1,8 +1,8 @@
 'use strict';
 
 var systoken_modal = angular.module('systemApp.token', ['ui.bootstrap', 'cgPrompt', 'cgNotify','toggle-switch'])
-.controller('SystemTokenController', ['$scope', '$http', '$routeParams', '$rootScope', '$timeout','$modal',  'prompt', 'notify',
-     function($scope, $http, $routeParams, $rootScope, $timeout, $modal, prompt, notify){
+.controller('SystemTokenController', ['$scope', '$http', '$routeParams', '$rootScope', '$timeout','$modal', '$location', 'prompt', 'notify',
+     function($scope, $http, $routeParams, $rootScope, $timeout, $modal, $location, prompt, notify){
 
      	$scope.init = function(){
             $scope.token = $routeParams.token;
@@ -24,25 +24,45 @@ var systoken_modal = angular.module('systemApp.token', ['ui.bootstrap', 'cgPromp
                         userId: data.userId,
                         token: data.token
                     };
+                    $scope.isShowInput = true;
                     console.log($scope.newToken);
      			};
      		})
      	};
 
-        $scope.saveNewPw = function(){
+        
+        // $scope.updatePw = function(){
+        //     $http({
+        //         method: 'POST',
+        //         url: '/japi/password',
+        //         data: $.param({
+        //             userId: $scope.newToken.userId,
+        //             password: $scope.oldPw,
+        //             password1: $scope.newPw,
+        //             password2: $scope.newPw2,
+        //         }),
+        //         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        //     }).success(function(data){
+        //         $scope.remindInfor(data);
+        //         (data.success) && ($location.path('/system#/setting/list'));
+        //     })
+        // };
+        $scope.saveNewPw = function(createPassword){
+            console.log(createPassword);
         	$http({
         		method: 'POST',
         		url: '/japi/smanage/add/password',
         		data: $.param({
-     				userId: userId,
-     				password1: $scope.newPw,
-     				password2: $scope.newPw2,
-     				token: token,
+     				userId: $scope.newToken.userId,
+     				password1: createPassword.new,
+     				password2: createPassword.new2,
+     				token: $scope.newToken.token,
      				status: 2
         		}),
         		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         	}).success(function(data){
         		$scope.remindInfor(data);
+                (data.success) && (window.location.href = "/system#/");
         	})
         };
 

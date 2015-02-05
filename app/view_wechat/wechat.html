@@ -1,0 +1,13 @@
+<div class="select-pane"  ng-controler="WeChatController" ng-init="init()">
+ <div class="search-team" style="margin-left: 93px;"> 
+  <form class="form-search"> 
+   <input type="text" class="span3 search-query" placeholder="搜索团队/公司/微信名称" ng-model="wechatKeywords"/> 
+   <button type="submit" class="btn search-btn" ng-click="searchList(wechatKeywords)">搜索</button> 
+  </form> 
+ </div> 
+  <div class="team-icon" ng-repeat="team in teamList" ng-click="locateUrl(team.id)">
+    <div class="team-name"><a href="/japi/team/select?id={{team.id}}">{{team.name}}</a></div>
+    <div class="weixin">微信：{{team.name}}</div>
+  </div>
+  <div style="clear: both"></div>
+</div>

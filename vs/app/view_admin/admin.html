@@ -1,9 +1,10 @@
+<link rel="stylesheet" href="/static/v1/qy/app/bower_components/jstree/dist/themes/department/style.css?v=20150113"/>
     <div class="mini-container" ng-controler="MiNiAdminController">
      <div class="group-tree">
         <div app-setting-admin-list selected-node="node" selected-node-changed="nodeChangedPromise" class="lf-menu-view"></div>
      </div>
       <div class="mini-detail">
-      		<div class="return"><a href="system#/vs"><<返回</a></div>
+      		<div class="return"><a href="vs#/apps"><<返回</a></div>
             <div class="sys-form" ng-init="isShowSysInput=false">
             <h4 ng-show="!isShowSysInput" ng-mouseenter="isShowSysName=true" ng-mouseleave="isShowSysName=false">{{miniAdmin.name}} <span>{{miniAdmin.homepage}}</span> 
             <i ng-if="isShowSysName && (teamSuperAdmin || clientSuperAdmin)" ng-click="$parent.isShowSysInput=true" class="fa fa-pencil"></i></h4>
@@ -21,10 +22,10 @@
               </div>
             </div>
 	         <div class="mini-admin">
-	         	<h4 class="mini-admin-tt">管理员</h4><a href="javascript:" ng-hide="applicationSuperAdmin && newNode.text == '超级管理员'" ng-click="modalChangeAdmin()">修改</a>
+	         	<h4 class="mini-admin-tt">管理员</h4><a href="javascript:" ng-click="modalChangeAdmin()">修改</a>
 	         	<div class="tag"><span ng-repeat="tag in selectedTags">{{tag.nickName}}</span></div>	
 	         	<h4 class="mini-admin-tt" ng-if="!isShowAdminRemind">权限表</h4>
-	         	<div class="chkall" ng-if="!isShowAdminRemind"><input type="checkbox" ng-model="$parent.promiseGroupChecked" ng-click="promiseGroupCheck(promiseGroupChecked)">全选</div>
+	         	<div class="chkall" ng-if="!isShowAdminRemind"><input type="checkbox" ng-model="promiseGroupChecked" ng-click="promiseGroupCheck(promiseGroupChecked)">全选</div>
                 <div ng-if="isShowAdminRemind">
                     <h4>权限范围</h4>
                     <p>即minisite的超级管理员，拥有此minisite在VS中的所有权限，以及在SIM中的配置权限。</p>
@@ -225,7 +226,7 @@
             <div class="modal-header">
                 <h4 class="modal-title center">修改管理员</h4>
             </div>
-            <div class="modal-body" ng-init="changeAdminInit()">
+            <div class="modal-body" ng-init="showAdminList()">
                 <div class="adminTags form-group">
                         <tags-input
                         ng-model="selectedTags"
@@ -235,9 +236,9 @@
                         add-on-space="false"
                         add-on-comma="false"
                         add-on-blur="false"
-                        on-tag-added="chkRepeatTags($tag,true)"
+                        on-tag-added="tagAdd($tag)"
                         on-tag-removed="removeAdminTag($tag)"
-                        placeholder="输入姓名查找"
+                        placeholder="输入空格或名称查找"
                         >
                         <auto-complete min-length="1" source="loadAdminList($query)"></auto-complete>
                     </tags-input>

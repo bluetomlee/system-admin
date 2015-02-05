@@ -1,25 +1,14 @@
 'use strict';
 
-var minilist_modal = angular.module('minisiteApp.list', ['ui.bootstrap', 'cgPrompt', 'cgNotify','angularFileUpload'])
-.controller('MiNiSiteListController', ['$scope', '$http', '$location', '$routeParams', '$rootScope', '$timeout','$modal','prompt', 'notify',
+var minidetail_modal = angular.module('minisiteApp.detail', ['ui.bootstrap', 'cgPrompt', 'cgNotify','angularFileUpload'])
+.controller('MiNiSiteDetailController', ['$scope', '$http', '$location', '$routeParams', '$rootScope', '$timeout','$modal','prompt', 'notify',
         function($scope, $http, $location, $routeParams, $rootScope, $timeout,$modal,prompt,notify) {
             
             // 初始化
             $timeout(function(){
-                $scope.cusRouteParams.appId = $routeParams;
-                $http.get('/japi/js/configs').success(function(data){
-                    var data = angular.fromJson(data.substring(15));
-                    console.log(data);
-                    if(data.clientSuperAdmin) {
-                        $scope.clientSuperAdmin = true;
-                    } else if(data.teamSuperAdmin){
-                        $scope.teamSuperAdmin = true;
-                    }else if(data.applicationSuperAdmin){
-                        $scope.applicationSuperAdmin = true;
-                    }
-                    $scope.refreshMiniList();
-                })
-               
+                $scope.miniId = $routeParams;
+                $scope.miniId = $routeParams.appId;
+                $scope.refreshMiniList();               
             });
 
             // 获取minisiteList
@@ -27,28 +16,19 @@ var minilist_modal = angular.module('minisiteApp.list', ['ui.bootstrap', 'cgProm
                 $scope.objParm = {
                     type: '4'
                 };
-                var listUrl = '/japi/team/list?';
-                $http.get(listUrl + $.param($scope.objParm)).success(function(data){
-                    if(data.items.length == 1){
-                        $scope.locateUrl(data.items[0].id);
-                    }else{
-                        $scope.miniListGroup = data.items;
-                        $scope.isShowSearch = true;
-                    }
-                });
-            };
-
-            // 进入某个VS
-            $scope.locateUrl = function(id){
-                window.location.href = '/system#/vs/detail/' + id;
-            };  
-
-            $scope.searchList = function(keywords){
-                $scope.objParm.keyword = keywords;
-                var url = '/japi/team/list?' + $.param($scope.objParm);
-                $http.get(url).success(function(data){
-                    $scope.miniListGroup = data.items;
+                var listUrl = '/japi/team/list?' + $.param($scope.objParm),
+                    isOffline = simconfigs.webroot.search('sim.dxy.cn');
+                $http.get(listUrl).success(function(data){
+                    angular.forEach(data.items,function(v,i){
+                        if(v.id == $scope.miniId){
+                            $scope.vsInfor = v;
+                            $http.get('/japi/vs/applications/get?teamId=' + $scope.miniId).success(function(result){
+                                $scope.miniList = result.items;
+                            })
+                        }
+                    })
                 })
+                $scope.vsSysUrl = (isOffline == -1) ? 'http://vs.sim.dxy.net/admin' : 'http://vs.dxy.cn/admin/' ;
             };
 
             // 共用Notify提醒
@@ -138,7 +118,7 @@ var minilist_modal = angular.module('minisiteApp.list', ['ui.bootstrap', 'cgProm
             }           
 }]);
 
-minilist_modal
+minidetail_modal
     .controller('CreateMiniSiteController',['$scope', '$http', '$modal','$timeout', 'FileUploader', '$modalInstance','notify',
         function($scope, $http, $modal, $timeout, FileUploader, $modalInstance, notify){
 

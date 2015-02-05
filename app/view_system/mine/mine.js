@@ -19,14 +19,33 @@ var sysmine_modal = angular.module('systemApp.mine', ['ui.bootstrap', 'cgPrompt'
             })
         };
         $scope.getPower = function(id){
-            $http.get('/japi/smanage/user/power?userId=' + id).success(function(data){
+            $scope.objPage = {
+                userId: id,
+                page: $scope.currentPage || 1,
+                size: $scope.maxSize || 10
+            };
+            $http.get('/japi/smanage/user/power?' + $.param($scope.objPage)).success(function(data){
                 var tmp = [],
                     bool = (!angular.isArray(data.items));
                 bool && (tmp.push(data.items))
                 $scope.adminPowers =  bool ? tmp : data.items;
+                $scope.setPagination(data.pageBean.count, data.pageBean.current, 10);
             })
         };
-
+        // 分页
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.pageChanged = function() {
+            console.log('Page changed to: ' + $scope.currentPage);
+            $scope.getPower($scope.userId);
+        };
+        $scope.setPagination = function(totalItems, currentPage, size) {
+            $scope.totalItems = totalItems;
+            $scope.currentPage = currentPage;
+            $scope.maxSize = size;
+            console.log($scope.currentPage, $scope.maxSize = size);
+        };
         $scope.changeUser = {
             saveEditPro : function(){
                 $http({
@@ -39,6 +58,8 @@ var sysmine_modal = angular.module('systemApp.mine', ['ui.bootstrap', 'cgPrompt'
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function(data){
                     $scope.remindInfor(data);
+                    $scope.isEditProfile = false;
+                    $scope.init();
                 })
             },
             editPro : function(){
@@ -134,6 +155,8 @@ sysmine_modal.controller('SystemMineModalController',['$scope', '$http', '$modal
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     }).success(function(data){
                         $scope.remindInfor(data);
+                        $scope.cancelModal();
+                        $scope.init();
                     })
                 }
             }
@@ -153,22 +176,22 @@ sysmine_modal.controller('SystemMineModalController',['$scope', '$http', '$modal
                     var self = this;
                     console.log(self);
                     self.chkPassword().then(function(rep){
+                        console.log(rep);
                         if(rep.data.success){
                             $http({
                                 method: 'POST',
                                 url: '/japi/password',
                                 data: $.param({
-                                    password: $scope.password.old,
-                                    repassword1: $scope.repassword.new1,
-                                    repassword2: $scope.repassword.new2
+                                    password: $scope.repassword.old,
+                                    repasswd1: $scope.repassword.new1,
+                                    repasswd2: $scope.repassword.new2
                                 }),
                                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                             }).success(function(data){
                                 if(data.success){
-                                    $scope.remindInfor(data);
                                     $scope.cancelModal();
                                 }
-                                
+                                $scope.remindInfor(data);
                             }) 
                         }else{
                             $scope.isShowErrorPassword = true;

@@ -1,0 +1,173 @@
+<div class="select-pane minisite"  ng-controler="MiNiSiteDetailController">
+    <div class="sys-infor" ng-mouseenter="isShowSysName=true" ng-mouseleave="isShowSysName=false">
+    <div class="sys-avatar" ng-click="modalUploadImg()">
+      <img ng-src="{{vsInfor.avatar}}">
+      <div class="avatar-btm" ng-show="isShowSysName && (teamSuperAdmin || clientSuperAdmin)"><span>修改头像</span></div>
+    </div>
+    <div class="sys-form" ng-init="isShowSysInput=false">
+    <h4 ng-show="!isShowSysInput">{{vsInfor.name}}         
+    <i ng-if="isShowSysName && (teamSuperAdmin || clientSuperAdmin)" ng-click="$parent.isShowSysInput=true" class="fa fa-pencil"></i></h4>
+      <div class="form-group" ng-show="isShowSysInput">
+        <input type="text" class="form-control" ng-model="vsInfor.name">
+      </div>
+      <p class="contxt" ng-show="!isShowSysInput" ng-bind="vsInfor.description"></p>
+      <div class="form-group sys-depict" ng-show="isShowSysInput">
+        <input type="text" class="form-control" ng-model="vsInfor.description">
+      </div>
+      <div class="form-group" ng-if="isShowSysInput && (teamSuperAdmin || clientSuperAdmin)">
+          <button class="btn btn-primary" ng-click="saveVsInfor(vsInfor)">保存</button>
+          <button class="btn btn-default" ng-click="$parent.isShowSysInput=false">取消</button>
+      </div>
+    </div>
+    <div class="sys-enter">
+      <button class="btn btn-primary" ><a target="a_blank" href="{{vsSysUrl}}">进入系统</a></button>
+    </div>
+  </div>
+  <div class="minisite-list" ng-if="teamSuperAdmin || applicationSuperAdmin || clientSuperAdmin">
+    <h5 class="minisite-list-tt">MiniSite列表</h5>
+    <p class="minisite-list-depict">创建、修改、删除 minisite，以及minisite管理员的权限配置</p>
+    <div class="minisite-list-items">
+      <div class="minisite-list-item" ng-repeat="mini in miniList" ng-mouseenter="isShowMiniBtm=true" ng-mouseleave="isShowMiniBtm=false">
+        <h3 ng-bind="mini.name"></h3>
+        <div class="btm">
+          <i class="fa fa-trash remove" ng-if="!applicationSuperAdmin" ng-click="removeMinisite(mini)" ng-show="isShowMiniBtm"></i>
+          <i class="fa fa-gear set" ng-click="locationAdmin(mini.id)" ng-show="isShowMiniBtm"></i>
+        </div>
+      </div>
+      <div class="minisite-list-item last" ng-hide="applicationSuperAdmin">
+        <h3 ng-click="modalCreateMinisite()">+</h3>
+      </div> 
+    </div>
+  </div>
+  <div style="clear: both"></div>
+</div>
+
+<!-- 创建Minisite -->
+    <div>
+        <script type="text/ng-template" id="createMinisitetpl.html" ng-if="teamSuperAdmin || clientSuperAdmin">
+            <div class="modal-header">
+                <h4 class="modal-title s-tc">创建Minisite</h4>
+            </div>
+            <div class="modal-body">
+               <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">域名：</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" ng-model="newMini.homepage" placeholder="http://">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">名称：</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" ng-model="newMini.name" placeholder="输入文本">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">介绍：</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" ng-model="newMini.des" placeholder="输入文本">
+                      </div>
+                  </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" ng-click="createMinisite()">确定</button>
+        <button class="btn btn-default" ng-click="cancelModal()">取消</button>    
+            </div>
+        </script>
+    </div>
+
+    <!--新建素材弹框-->
+    <div class="modal-container" ng-if="teamSuperAdmin || clientSuperAdmin">
+        <script type="text/ng-template" id="materialImageUploadModal.html">
+            <div class="modal-header">
+                <h3 class="modal-title">图片上传</h3>
+                <div class="upload-header">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <input class="input-upload" type="file" nv-file-select="" uploader="uploader" multiple  />
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row panel-image-upload">
+                    <div class="col-md-12">
+                        <p>仅支持 jpe/jpeg, 大小在 1M 以内，已选择图片数量: {{ uploader.queue.length }}</p>
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th width="50%">图片名称</th>
+                                <th ng-show="uploader.isHTML5">大小</th>
+                                <th ng-show="uploader.isHTML5">上传进度</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in uploader.queue">
+                                <td>
+                                    <strong>{{ item.file.name }}</strong>
+                                    <!-- Image preview -->
+                                    <!--auto height-->
+                                    <!--<div ng-thumb="{ file: item.file, width: 100 }"></div>-->
+                                    <!--auto width-->
+                                    <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 50 }"></div>
+                                    <!--fixed width and height -->
+                                    <!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>-->
+                                </td>
+                                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td ng-show="uploader.isHTML5">
+                                    <div class="progress" style="margin-bottom: 0;">
+                                        <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                    <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                    <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                </td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                        <span class="glyphicon glyphicon-upload"></span> 上传
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                        <span class="glyphicon glyphicon-ban-circle"></span> 取消
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                        <span class="glyphicon glyphicon-trash"></span> 删除
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div>
+                            <div>
+                                所有文件上传进度:
+                                <div class="progress" style="">
+                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="hide btn btn-default btn-s upload-btn">
+                    <span class="glyphicon glyphicon-plus"></span> 选择文件
+                    <input class="input-upload" type="file" nv-file-select="" uploader="uploader" multiple  />
+                </button>
+                <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                    <span class="glyphicon glyphicon-upload"></span> 全部上传
+                </button>
+                <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                    <span class="glyphicon glyphicon-ban-circle"></span> 取消上传
+                </button>
+                <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                    <span class="glyphicon glyphicon-trash"></span> 移除所有图片
+                </button>
+            </div>
+        </script>
+    </div>

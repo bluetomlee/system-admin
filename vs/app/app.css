@@ -39,7 +39,7 @@
 }
 
 .team .container-app {
-    width: 960px;
+    width: 840px;
     min-height: 640px;
     border: 1px solid #ccc;
     margin: 0 auto;
@@ -59,19 +59,17 @@
     background: #f9f9f9;
 }
 .team .container-app .navigation a{
+    color:#333;
+}
+.team .container-app .navigation span{
     display: inline-block;
-    margin-right: -2px;
-    padding: 0px 44px;
     line-height: 42px;
+    padding: 0px 44px;
     cursor: pointer;
     font-weight: bold;
     font-size: 14px;
-    color:#333;
 }
-.team .container-app .navigation .active{
-    background: #eee;
-}
-.team .container-app .navigation a:hover{
+.team .container-app .navigation span:hover{
     background: #eee;
 }
 .team .container-app .header-app .success {
@@ -79,25 +77,12 @@
 }
 
 .team .container-app .header-app .account {
-    position: relative;
     color: #ccc;
     font-size: 12px;
     line-height: 1em;
     text-align: right
 }
-.team .container-app .header-app .account .accountPanel{
-    position: relative;
-    
-    color: #333;
-}
-.team .container-app .header-app .account #accountPanel{
-    cursor: pointer;
-}
-.team .container-app .header-app .account ul{
-    left: 891px;
-    margin-top: 10px;
-}
-}
+
 .team .container-app .header-app .account a:hover {
     text-decoration: none
 }
@@ -174,44 +159,18 @@
 }
 
 .team .container-app .search-team .search-query {
-    height: 28px;
-    width: 236px;
+    height: 20px;
     margin-bottom: 0px;
-    border-radius: 5px;
-    padding-left: 8px;
-    line-height: 1.5em;
-    border: 1px solid #CCC;
-    background-color: #FFF;
+    border-radius: 15px
 }
-.team .container-app .search-team button{
-    display: inline-block;
-    padding: 4px 12px;
-    margin-bottom: 0;
-    font-size: 14px;
-    line-height: 20px;
-    color: #333;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    background-color: #F5F5F5;
-    border: 1px solid #CCC;
-    border-radius: 3px;
-}
-.team .container-app .search-team button:hover{
-    color: #333333;
-    background-color: #e6e6e6;
-    *background-color: #d9d9d9;
-}
-.team .container-app .select-pane{
-    padding-bottom: 20px;
-}
+
 .team .container-app .select-pane .team-icon {
-    width: 246px;
-    height: 94px;
+    width: 214px;
+    height: 60px;
     padding: 15px;
     border: 1px solid #d7d7d7;
     border-radius: 4px;
-    margin: 20px 10px 10px 50px;
+    margin: 20px 10px 0 10px;
     float: left;
     cursor: pointer;
     box-shadow: 1px 1px 6px rgba(0,0,0,0.05)
@@ -222,9 +181,7 @@
     font-weight: bold;
     margin-bottom: 5px
 }
-.team .container-app .select-pane .team-icon .team-name a{
-    color: #333;
-}
+
 .team .container-app .select-pane .team-icon .weixin {
     color: #666
 }

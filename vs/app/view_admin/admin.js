@@ -8,9 +8,9 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
 
         console.log($scope.teamSuperAdmin);
 
-        $timeout(function(){
+         $timeout(function(){
                 $scope.init();
-        })
+            })
 
 
         // 初始化
@@ -18,12 +18,14 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
             $scope.appId = $routeParams.appId;
             $scope.refreshMiniAdmin();
             $scope.$watch('permissionsGroup', function(newVal, oldVal) {
+                console.info($scope.permissionsGroup)
                 var count = 0;
                 angular.forEach(newVal, function(value, key) {
                     if(value) {
                         count = count + 1;
                     }
                 });
+
                 if(count == 40) {
                     $scope.promiseGroupChecked = true;
                 } else {
@@ -198,7 +200,6 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
                     message: '操作成功',
                     classes: 'alert-success'
                 })
-                return true;
             }else{
                 notify({
                     message: data.message,
@@ -230,7 +231,7 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
         // 管理员列表更新
         $scope.loadAdminList = function(query) {
             var deferred = $q.defer();
-            $http.get('/japi/admininfo/clientlist?keyword=' + query).success(function(data){
+            $http.get('/japi/vs/admininfo/clientlist?keyword=' + query).success(function(data){
                 deferred.resolve(data.items);
             });
             return deferred.promise;
@@ -269,16 +270,15 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
                 teamSuperAjax = function(){
                     return $http({
                         method: 'POST',
-                        url: '/japi/teamminfo/add/teamadmin',
+                        url: '/japi/vs/application/add/teamadmin',
                         data: $.param({
                             id: $routeParams.appId,
-                            admins: superAdmins
+                            superAdmins: superAdmins
                         }),
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
                 };
-            console.log($scope.teamSuperAdmin && $scope.newNode.text);
-            if(($scope.teamSuperAdmin || $scope.clientSuperAdmin) && $scope.newNode.text == '超级管理员'){
+            if($scope.teamSuperAdmin && $scope.newNode.text == '超级管理员'){
                 teamSuperAjax().then(function(rep){
                     if(rep.data.success){
                         $http({
@@ -290,7 +290,7 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
                             }),
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function(data){
-                            $scope.remindInfor(data);
+                            $scope.remindInfor(data)
                         });                         
                     }
                    
@@ -299,15 +299,9 @@ var admin_modal = angular.module('minisiteApp.admin', ['ui.bootstrap', 'cgPrompt
             }else{
                 teamSuperAjax().then(function(rep){
                      owerFunc.adminAuthorization(grantData.id, grantData.userIds, grantData.resourceIds).then(function(rep) {
-                        
-                        if(rep.data){
+                        if(rep.data) {
                             $scope.remindInfor(rep.data);
-                            $timeout(function() {
-                                window.location.reload();
-                            }, 1000);
-                            
                         }
-
                     });                   
                 })
             }
@@ -323,34 +317,6 @@ admin_modal
                 $modalInstance.close(result);
             };
 
-            $scope.changeAdminInit = function(){
-                $scope.showAdminList();
-                $scope.getAdminGroup();
-            }
-            $scope.getAdminGroup = function(){
-                $http.get("/japi/admingroup/list?applicationId=" + $scope.appId + "&templateId=61").success(function(data){
-                    $scope.adminGroupList = data.items;
-                })                
-            }
-            $scope.chkRepeatTags = function(tag,add){
-                notify.closeAll();
-                $scope.isRepeatAdminGroup = false;
-                angular.forEach($scope.adminGroupList,function(v,i){
-                    angular.forEach(v.admins,function(v2,i2){
-                        if(v2.adminId == tag.id){
-                            $scope.isRepeatAdminGroup = true;
-                            if(add){
-                                var index = $scope.selectedTags.length - 1;
-                                $scope.selectedTags.splice(index,1);
-                            }
-                            notify({
-                                message: tag.nickName + '已在' + v.name + '管理组中',
-                                classes: 'alert-error'
-                            });
-                        }
-                    })
-                })
-            };
             // 当删除时增加管理员列表
             $scope.removeAdminTag = function(tag){
                 $scope.adminList.push(tag);
@@ -378,7 +344,7 @@ admin_modal
                     'size' : $scope.maxSize || 8
                 };
                 // 删除已有管理员           
-                var url = '/japi/admininfo/clientlist?' + $.param(param);        
+                var url = '/japi/vs/admininfo/clientlist?' + $.param(param);        
                 $http.get(url).success(function(data){              
                     $scope.setPagination(data.pageBean.count, data.pageBean.current, 8); 
                     if($scope.selectedTags  !==  data.items){
@@ -386,6 +352,7 @@ admin_modal
                                 ($scope.selectedTags) && 
                                     angular.forEach($scope.selectedTags,function(v2,i2){
                                         if(v.email == v2.email){
+                                            console.log(data.items);
                                             data.items.splice(i,1);
                                             console.log(i,$scope.selectedTags,data.items);
                                         }
@@ -395,20 +362,19 @@ admin_modal
                     }                
                 });
              }
-            $scope.changeAdminList = function(item,index){ 
-                $scope.chkRepeatTags(item);          
-                if(!$scope.isRepeatAdminGroup){
-                    var bool;
-                    angular.forEach($scope.selectedTags,function(v,k){
-                        if(v.id == item.adminId){
-                            bool = true;
-                        }
-                    });
-                    if(!bool){
-                        $scope.adminList.splice(index,1);
-                        $scope.selectedTags.push(item);
+            $scope.changeAdminList = function(item,index){
+                
+                var bool;
+                angular.forEach($scope.selectedTags,function(v,k){
+                    if(v.id == item.adminId){
+                        bool = true;
                     }
+                });
+                if(!bool){
+                    $scope.adminList.splice(index,1);
+                    $scope.selectedTags.push(item);
                 }
+                console.info(item,index,$scope.adminList,$scope.selectedTags);
             };
             // 关闭modal
             $scope.cancelModal = function () {

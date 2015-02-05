@@ -59,64 +59,61 @@ admin_modal.directive('appSettingAdminList', ['$timeout', '$parse', '$routeParam
                                     "create" : {
                                         "label"             : "添加管理组",
                                         "action"            : function (data) {
-                                            if (o.parent != '#') {
-                                                alert('只能添加一级管理组');
-                                            } else {
+                                            var inst = $.jstree.reference(data.reference),
+                                            obj = inst.get_node(data.reference);
+                                            // alert('data');
+                                            //
+                                            prompt({
+                                                title: '添加管理组',
+                                                /*message: '请输入新部门名称?',*/
+                                                input: true,
+                                                /* label: '名称', */
+                                                value: '新管理组名称',
+                                                "buttons": [
+                                                {label:'取消',cancel:true},
+                                                {label:'创建',primary:true}
+                                                ]
+                                            }).then(function(Newname) {
+                                                //the promise is resolved with the user input
+                                                //he hit ok and not cancel
+                                                // obj.text = Newname;
+
+                                                console.log(obj);
+                                                // if(obj.id == "#"){obj.id=0};
+                                                $http({
+                                                    method: 'POST',
+                                                    url: '/japi/admingroup/create',
+                                                    data: $.param({
+                                                        applicationId: appId,
+                                                        templateId: templateId,
+                                                        name: Newname
+                                                    }),
+                                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                                }).success(function(rep) {
+                                                    console.info(rep)
+                                                    if(rep.success) {
+                                                        inst.create_node(obj, {
+                                                            "id": rep.data.id,
+                                                            "teamId": rep.data.teamId,
+                                                            "text": Newname
+                                                        }, "last", function (new_node) {
+                                                            console.log(new_node);
+                                                            /* setTimeout(function () { inst.edit(new_node); },0);*/
+                                                        });
+                                                    } else {
+                                                        alert(rep.message);
+                                                    }
+                                                });
+
+                                                /* 默认的方法
                                                 var inst = $.jstree.reference(data.reference),
                                                 obj = inst.get_node(data.reference);
-                                                // alert('data');
-                                                //
-                                                prompt({
-                                                    title: '添加管理组',
-                                                    /*message: '请输入新部门名称?',*/
-                                                    input: true,
-                                                    /* label: '名称', */
-                                                    value: '新管理组名称',
-                                                    "buttons": [
-                                                    {label:'取消',cancel:true},
-                                                    {label:'创建',primary:true}
-                                                    ]
-                                                }).then(function(Newname) {
-                                                    //the promise is resolved with the user input
-                                                    //he hit ok and not cancel
-                                                    // obj.text = Newname;
-
-                                                    console.log(obj);
-                                                    // if(obj.id == "#"){obj.id=0};
-                                                    $http({
-                                                        method: 'POST',
-                                                        url: '/japi/admingroup/create',
-                                                        data: $.param({
-                                                            applicationId: appId,
-                                                            templateId: templateId,
-                                                            name: Newname
-                                                        }),
-                                                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                                                    }).success(function(rep) {
-                                                        console.info(rep)
-                                                        if(rep.success) {
-                                                            inst.create_node(obj, {
-                                                                "id": rep.data.id,
-                                                                "teamId": rep.data.teamId,
-                                                                "text": Newname
-                                                            }, "last", function (new_node) {
-                                                                console.log(new_node);
-                                                                /* setTimeout(function () { inst.edit(new_node); },0);*/
-                                                            });
-                                                        } else {
-                                                            alert(rep.message);
-                                                        }
-                                                    });
-
-                                                    /* 默认的方法
-                                                    var inst = $.jstree.reference(data.reference),
-                                                    obj = inst.get_node(data.reference);
-                                                    inst.create_node(obj, {}, "last", function (new_node) {
-                                                    setTimeout(function () { inst.edit(new_node); },0);
-                                                });
-                                                */
+                                                inst.create_node(obj, {}, "last", function (new_node) {
+                                                setTimeout(function () { inst.edit(new_node); },0);
                                             });
-                                        }
+                                            */
+                                        });
+
                                     }
                                 },
                                 "rename" : {

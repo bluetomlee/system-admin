@@ -4,14 +4,17 @@ var sysback_modal = angular.module('systemApp.back', ['ui.bootstrap', 'cgPrompt'
 .controller('SystemAdminController', ['$scope', '$http', '$routeParams', '$rootScope', '$timeout','$modal',  'prompt', 'notify',
      function($scope, $http, $routeParams, $rootScope, $timeout, $modal, prompt, notify){
 
-     	$scope.init = function(){
-     		$scope.getclientSuper();
-     	};
+        $scope.init = function(){
+            $scope.getclientSuper();
+        };
 
 
         $scope.getclientSuper = function(){
             $http.get('/japi/smanage/clientsuper/list').success(function(data){
                 $scope.clientSuperList = data.item;
+                if(simconfigs.clientSuperAdmin){
+                    $scope.clientSuperAdmin = true;
+                }
             })
         };
         $scope.modalChangeAdmin = function(){
@@ -47,15 +50,36 @@ var sysback_modal = angular.module('systemApp.back', ['ui.bootstrap', 'cgPrompt'
      }
 ]);
 sysback_modal
-    .controller('SystemAdminModalController',['$scope', '$http', '$modal','$timeout','$modalInstance','notify',
-        function($scope, $http, $modal, $timeout, $modalInstance, notify){
+    .controller('SystemAdminModalController',['$scope', '$http', '$modal','$timeout','$modalInstance','$q','notify',
+        function($scope, $http, $modal, $timeout, $modalInstance, $q, notify){
 
+
+            // 保存管理员临时用
+            $scope.newSelectedTags = [];
 
             // 当删除时增加管理员列表
             $scope.removeAdminTag = function(tag){
                 $scope.adminList.push(tag);
-                // console.log(tag,$scope.adminList);
-            };        
+                // 第一次缓存到操作的数组
+                angular.forEach($scope.clientSuperList,function(v,i){
+                    if(v.id == tag.id){
+                        tag.changed = 2;
+                        $scope.newSelectedTags.push(tag);                        
+                    }
+                    
+                });
+                // 过滤去重
+                angular.forEach($scope.newSelectedTags,function(v,i){
+                    if(v.id == tag.id && tag.changed == 1){
+                        $scope.newSelectedTags.splice(i,1);
+                    }
+                })
+            }; 
+
+            $scope.addAdminTag = function(tag){
+                tag.changed = 1;
+                $scope.newSelectedTags.push(tag);
+            }       
             // 分页
             $scope.setPage = function (pageNo) {
                 $scope.currentPage = pageNo;
@@ -75,7 +99,8 @@ sysback_modal
                 var param = {
                     applicationId: $scope.appId,
                     'page' : $scope.currentPage || 1,
-                    'size' : $scope.maxSize || 8
+                    'size' : $scope.maxSize || 8,
+                    'active': true
                 };
                 // 删除已有管理员           
                 var url = '/japi/smanage/client/list?' + $.param(param);
@@ -89,7 +114,6 @@ sysback_modal
                                 ($scope.selectedTags) && 
                                     angular.forEach($scope.selectedTags,function(v2,i2){
                                         if(v.id == v2.id){
-                                            console.log(data.items);
                                             data.items.splice(i,1);
                                             console.log(i,$scope.selectedTags,data.items);
                                         }
@@ -118,34 +142,20 @@ sysback_modal
                 },
                 assembly: function(){
                     var self = this,
-                        selectedTags,
-                        clientSuperList;
-                    clientSuperList = angular.copy($scope.clientSuperList);
-                    selectedTags = angular.copy($scope.selectedTags);
-                    if(selectedTags.length > 0){
-                        //取合集，去除重复
-                        var union,
-                            intersect;
-                        union = $.unique(clientSuperList.concat(selectedTags));
-                        intersect = self.intersect(clientSuperList,selectedTags);
-                        angular.forEach(union,function(v,i){
-                            self.postSystemAdmin(v.id,true);
-                        });
-                        angular.forEach(intersect,function(v,i){
-                            self.postSystemAdmin(v.id,false);
-                        });
-                    }else{
-                        angular.forEach(clientSuperList,function(v,i){
-                            self.postSystemAdmin(v.id,false);
-                        })
-                    }
+                        selectedTags = [],
+                        clientSuperList = [];
+                    console.log($scope.newSelectedTags);
+                    // return;
+                    angular.forEach($scope.newSelectedTags,function(v,i){
+                        (v.changed == 1) ? self.postSystemAdmin(v.id,true) : self.postSystemAdmin(v.id,false);
+                    })
                    
                     notify({
                         message: '操作成功',
                         classes: 'alert-success'
                     });
                     $scope.cancelModal();
-                    $scope.init();
+                    $scope.getclientSuper();
                 },
                 postSystemAdmin:function(id,bool){
                     $http({
@@ -161,17 +171,37 @@ sysback_modal
                 }
             };
             $scope.changeAdminList = function(item,index){      
-                var bool;
+                var bool,
+                    changed;
                 angular.forEach($scope.selectedTags,function(v,k){
-                    if(v.id == item.adminId){
+                    if(v.id == item.id){
                         bool = true;
                     }
                 });
                 if(!bool){
                     $scope.adminList.splice(index,1);
                     $scope.selectedTags.push(item);
+                    angular.forEach($scope.clientSuperList,function(v,i){
+                        if(v.id == item.id){
+                            changed = true;
+                        }
+                    })
+                    if(!changed){
+                        item.changed = 1;
+                        $scope.newSelectedTags.push(item);
+                    }
+                    
+
                 }
-                console.info(item,index,$scope.adminList,$scope.selectedTags);
+                console.info($scope.newSelectedTags);
+            };
+            // 管理员列表更新
+            $scope.loadAdminList = function(query) {
+                var deferred = $q.defer();
+                $http.get('/japi/admininfo/clientlist?keyword=' + query).success(function(data){
+                    deferred.resolve(data.items);
+                });
+                return deferred.promise;
             };
             // 关闭modal
             $scope.cancelModal = function () {

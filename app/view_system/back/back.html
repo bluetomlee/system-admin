@@ -1,19 +1,19 @@
 <div class="setting-container" ng-controler="SystemAdminController" ng-init="init()">
   <aside>
     <ul>
-        <li class="menu-item"><a href="system#/setting/list">所有管理员</a>
+        <li class="menu-item" ng-class="{active: isActiveUrl('#/setting/list')}"><a href="system#/setting/list">所有管理员</a>
         </li>
-        <li class="menu-item"><a href="system#/setting/mine">我</a></li>
-        <li class="menu-item"><a href="system#/setting/back">系统</a></li>
+        <li class="menu-item" ng-class="{active: isActiveUrl('#/setting/mine')}"><a href="system#/setting/mine">我</a></li>
+        <li class="menu-item" ng-class="{active: isActiveUrl('#/setting/back')}"><a href="system#/setting/back">系统</a></li>
     </ul>
   </aside>
   <div class="mini-detail">
        <div class="mini-admin">
-        <h4 class="mini-admin-tt">管理员</h4><a href="javascript:" ng-click="modalChangeAdmin()">修改</a>
+        <h4 class="mini-admin-tt">管理员</h4><a href="javascript:"  ng-hide="!clientSuperAdmin" ng-click="modalChangeAdmin()">修改</a>
         <div class="tag"><span ng-repeat="tag in clientSuperList">{{tag.nickName}}</span></div>
             <div>
                 <h4>权限范围</h4>
-                <p>即minisite的超级管理员，拥有此minisite在VS中的所有权限，以及在SIM中的配置权限。</p>
+                <p>拥有SIM系统范围内的所有权限</p>
             </div>        
        </div>
   </div>
@@ -35,9 +35,9 @@
                         add-on-space="false"
                         add-on-comma="false"
                         add-on-blur="false"
-                        on-tag-added="tagAdd($tag)"
+                        on-tag-added="addAdminTag($tag)"
                         on-tag-removed="removeAdminTag($tag)"
-                        placeholder="输入空格或名称查找"
+                        placeholder="输入姓名查找"
                         >
                         <auto-complete min-length="1" source="loadAdminList($query)"></auto-complete>
                     </tags-input>

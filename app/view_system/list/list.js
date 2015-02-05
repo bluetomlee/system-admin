@@ -33,8 +33,17 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
             initAdminList: function() {
                 var self = this;
                 self.getAdminList();
+                self.listLimit();
             },
-
+            listLimit : function() {
+                var url = '/japi/smanage/adminnum/limit';
+                $http.get(url).success(function(data){
+                    $scope.listLimit = {
+                        active: data.active,
+                        numLimit: data.numLimit
+                    }
+                })
+            },
             getAdminList: function(search) {
                 var url,
                     self = this;
@@ -60,7 +69,7 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
             // switch切换
             chkActive: function(user) {
                 console.log(user);
-                (!user.active) ? $scope.modalAll.disableAdmin(user.id) : $scope.modalAll.activeAdmin(user.id);  
+                (!user.active) ? $scope.modalAll.disableAdmin(user) : $scope.modalAll.activeAdmin(user);  
             },
 
             active: function(userId,bool){
@@ -99,11 +108,20 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
 
             // 弹出层--添加、编辑管理员
             modalEditAdmin: function(user) {
+                var result = parseInt($scope.listLimit.numLimit) - parseInt($scope.listLimit.active);
+                if(result <= 0){
+                    notify({
+                        message: '容量已满',
+                        classes: 'alert-error'
+                    })
+                    return;
+                }
                 if(user){
                     $scope.isEditAdmin = true;
                     $scope.newAdmin = angular.copy(user);
                     
                 }else{
+
                     $scope.isEditAdmin = false;
                     $scope.newAdmin = {};
                 }
@@ -152,21 +170,7 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
         // 提示窗弹出层集合
         $scope.modalAll = {
 
-            addAdminActive: function(){
-                prompt({
-                    title: '添加管理员',
-                    message: '<div><i class="fa fa-warning warning"></i>验证消息将发送至邮箱' + $scope.newAdmin.email + 
-                    '用户验证后，将激活管理员身份。确定添加该用户为管理员？</div>',
-                    "buttons": [
-                        {label:'确认',primary:true},
-                        {label:'取消',cancel:true}
-                    ]
-                }).then(function(result){
-                    $scope.publishMenu(data.id);
-                })
-            },
-
-            resetPw: function(admin){
+            resetPw: function(admin,update){
                 prompt({
                     title: '重置密码',
                     message: '<div><i class="fa fa-warning warning"></i>管理员将被禁用，确定重置？</br>系统将发送验证信息至邮箱 ' + admin.email + 
@@ -177,7 +181,7 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
                     ]
                 }).then(function(result){
                     $scope.sysListClass.repassword(admin).then(function(rep){
-                        $scope.remindInfor(rep.data);
+                        (!update) && $scope.remindInfor(rep.data);
                     })
                 })
             },
@@ -192,43 +196,53 @@ var syslist_modal = angular.module('systemApp.list', ['ui.bootstrap', 'cgPrompt'
                         {label:'取消',cancel:true}
                     ]
                 }).then(function(result){
-                    $scope.sysListClass.repassword(admin).then(function(rep){
+                    $scope.sysListClass.repassword(admin,1).then(function(rep){
                         $scope.remindInfor(rep.data);
                     })
                 })
             },
-            activeAdmin: function(userId){
-                console.log(userId);
+            activeAdmin: function(user){
+                console.log(user);
                 prompt({
                     title: '提示',
                     message: '<div><i class="fa fa-warning warning"></i>激活后，该管理员将被允许登陆系统，确定激活？</div>',
                     "buttons": [
                         {label:'确认',primary:true},
-                        {label:'取消',cancel:true}
+                        {label:'取消',default:true}
                     ]
                 }).then(function(result){
-                    $scope.sysListClass.active(userId,true);
+                    if(result.primary){
+                        $scope.sysListClass.active(user.id,true);
+                    }else{
+                        user.active = false;
+                    }
+                    
                 })
             },
 
-            disableAdmin: function(userId){
+            disableAdmin: function(user){
                 prompt({
                     title: '提示',
                     message: '<div><i class="fa fa-warning warning"></i>禁用后，该管理员将无法登陆系统，确定禁用？</div>',
                     "buttons": [
                         {label:'确认',primary:true},
-                        {label:'取消',cancel:true}
+                        {label:'取消',default:true}
                     ]
                 }).then(function(result){
-                    $scope.sysListClass.active(userId,false);
+                    if(result.primary){
+                        $scope.sysListClass.active(user.id,false);
+                    }else{
+                        user.active = true;
+                    }
+                    
                 })
             },
         };
 
 }]);
 
-syslist_modal.controller('SystemListModalController',['$scope', '$http', '$modal','$timeout','$modalInstance','notify','items',
-		function($scope, $http, $modal, $timeout, $modalInstance, notify, items){
+syslist_modal.controller('SystemListModalController',['$scope', '$http', '$modal','$timeout','$modalInstance', 'prompt', 'notify','items',
+		function($scope, $http, $modal, $timeout, $modalInstance, prompt, notify, items){
 
             // 分页
             $scope.setPage = function (pageNo) {
@@ -259,15 +273,31 @@ syslist_modal.controller('SystemListModalController',['$scope', '$http', '$modal
                     })
                 
             };
-            $scope.createAdmin = function(){
+            $scope.addAdminActive = function(newAdmin){
+                var admin = angular.copy(newAdmin);
+                $scope.cancelModal();
+                prompt({
+                    title: '添加管理员',
+                    message: '<div><i class="fa fa-warning warning"></i>验证消息将发送至邮箱' + $scope.newAdmin.email + 
+                    '用户验证后，将激活管理员身份。确定添加该用户为管理员？</div>',
+                    "buttons": [
+                        {label:'确认',primary:true},
+                        {label:'取消',cancel:true}
+                    ]
+                }).then(function(result){
+                    console.log(admin);
+                    $scope.createAdmin(admin);
+                })
+            },
+            $scope.createAdmin = function(newAdmin){
                 $http({
                     method: 'POST',
                     url: '/japi/smanage/add/admin',
                     data: $.param({
-                        name: $scope.newAdmin.nickName,
-                        telephone: $scope.newAdmin.cellphone,
-                        email: $scope.newAdmin.email,
-                        weixin: $scope.newAdmin.weixin
+                        name: newAdmin.nickName,
+                        telephone: newAdmin.cellphone,
+                        email: newAdmin.email,
+                        weixin: newAdmin.weixin
                     }),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function(data){
@@ -278,9 +308,7 @@ syslist_modal.controller('SystemListModalController',['$scope', '$http', '$modal
             };
 
             $scope.updateAdmin = function(){
-                if($scope.newAdmin.reset){
-                     $scope.modalAll.resetPw($scope.newAdmin);
-                }
+                ($scope.newAdmin.reset) && $scope.modalAll.resetPw($scope.newAdmin)
                 $http({
                     method: 'POST',
                     url: '/japi/smanage/update/admin',
@@ -293,7 +321,9 @@ syslist_modal.controller('SystemListModalController',['$scope', '$http', '$modal
                     }),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function(data){
-                    $scope.remindInfor(data);
+                    if(!$scope.newAdmin.reset){
+                        $scope.remindInfor(data);
+                    }
                     $scope.cancelModal();
                     $scope.sysListClass.initAdminList();
                 })

@@ -1,0 +1,32 @@
+<div class="mini-admin" ng-controler="MiNiAdminController">
+     <div class="group-tree">
+     </div>
+      <div class="mini-detail">
+      		<div class="return"><a href=""><<返回</a></div>
+            <div class="sys-form" ng-init="isShowSysInput=false">
+            <h4 ng-show="!isShowSysInput" ng-mouseenter="isShowSysName=true" ng-mouseleave="isShowSysName=false">系统名称                
+            <i ng-if="isShowSysName" ng-click="$parent.isShowSysInput=true" class="fa fa-pencil"></i></h4>
+              <div class="form-group" ng-show="isShowSysInput">
+                <input type="text" class="form-control">
+              </div>
+              <p class="contxt" ng-show="!isShowSysInput">测试文字</p>
+              <div class="form-group sys-depict" ng-show="isShowSysInput">
+                <input type="text" class="form-control">
+              </div>
+              <div class="form-group" ng-show="isShowSysInput">
+                  <button class="btn btn-primary">保存</button>
+                  <button class="btn btn-default" ng-click="isShowSysInput=false">取消</button>
+              </div>
+            </div>
+	         <div class="mini-admin">
+	         	<h4 class="mini-admin-tt">管理员</h4><a href="">修改</a>
+	         	<div class="tag">tags</div>	
+	         	<h4>权限范围</h4>
+	         	<p>即minisite的超级管理员，拥有此minisite在VS中的所有权限，以及在SIM中的配置权限。</p>
+	         </div>
+	         <div class="save">
+	         	<button class="btn btn-primary">保存</button>
+	         </div>	
+      </div>    
+    <div style="clear: both"></div>
+</div>

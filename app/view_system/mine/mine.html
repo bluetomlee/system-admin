@@ -1,10 +1,10 @@
 <div class="setting-container" ng-controler="SystemMineController" ng-init="init()">
   <aside>
     <ul>
-        <li class="menu-item"><a href="system#/setting/list">所有管理员</a>
+        <li class="menu-item" ng-class="{active: isActiveUrl('#/setting/list')}"><a href="system#/setting/list">所有管理员</a>
         </li>
-        <li class="menu-item"><a href="system#/setting/mine">我</a></li>
-        <li class="menu-item"><a href="system#/setting/back">系统</a></li>
+        <li class="menu-item" ng-class="{active: isActiveUrl('#/setting/mine')}"><a href="system#/setting/mine">我</a></li>
+        <li class="menu-item" ng-class="{active: isActiveUrl('#/setting/back')}"><a href="system#/setting/back">系统</a></li>
     </ul>
   </aside>
   <div class="mine">
@@ -85,6 +85,23 @@
               </tr>
             </tbody>
           </table>
+          <div class="pageview">
+              <pagination
+                      ng-change="pageChanged()"
+                      total-items="totalItems"
+                      ng-model="currentPage"
+                      max-size="3"
+                      items-per-page="maxSize"
+                      class="pagination-sm"
+                      boundary-links="true"
+                      rotate="false"
+                      previous-text="&lsaquo;"
+                      next-text="&rsaquo;"
+                      first-text="&laquo;"
+                      last-text="&raquo;"
+                      >
+              </pagination>
+          </div>
       </div>
   </div>
   <div style="clear: both"></div>

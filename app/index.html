@@ -34,10 +34,18 @@
 
   <!-- 第三方库 通过gulp合并，详情见gulpfile.js -->
   <script type="text/javascript" src="/static/v1/qy/dist/js/aio-min.js?v=<?php echo URL::assetsVersion() ?>"></script>
+
+  <!-- 自定义配置 -->
+  <script type="text/javascript" src="/japi/js/configs?v=<?php echo URL::assetsVersion() ?>"></script>
+  
   <script type="text/javascript" src="/static/v1/system/app/app.js"></script>
+
+  <!-- wechat js-->
+  <script type="text/javascript" src="/static/v1/system/app/view_wechat/wechat.js"></script>
 
   <!-- ministe js-->
   <script type="text/javascript" src="/static/v1/system/app/view_minisite/minisite_list.js"></script>
+    <script type="text/javascript" src="/static/v1/system/app/view_minisite/minisite_detail.js"></script>
   <script type="text/javascript" src="/static/v1/system/app/view_admin/admin.js"></script>
   <script type="text/javascript" src="/static/v1/system/app/view_admin/admin-directive.js"></script>
   <!-- ministe End-->
@@ -55,27 +63,36 @@
   <div class="container" style="padding-left: calc(100vw - 100%);"> 
    <div class="content" role="main"> 
     <div class="app" style="min-height: 640px"> 
-     <div class="app-init-container">
+     <div class="app-init-container" ng-init="init()">
       <div class="team">
        <div class="wrapper-app"> 
         <div class="container-app"> 
          <div class="header-app"> 
           <span class="title">选择团队/公司</span> 
           <div class="account">
-           <span style="color: #000"></span> - 
-           <a href="/japi/logout">退出</a>
+            <div class="dropdown accountPanel">
+                <span class="dropdown-toggle" id="accountPanel" data-toggle="dropdown">
+                    {{myAdminName}}
+                    <span class="caret"></span>
+                </span>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="accountPanel">
+                    <li role="presentation">
+                      <a role="menuitem" tabindex="-1" href="/system#/">控制台</a>
+                    </li>
+                    <li role="presentation">
+                      <a role="menuitem" tabindex="-1" href="/system#/setting/mine">我</a>
+                    </li>
+                    <li role="presentation">
+                      <a role="menuitem" tabindex="-1" href="/japi/logout">退出</a>
+                    </li>
+                </ul>
+            </div>
           </div> 
          </div>
          <div class="navigation">
-           <span><a href="v2/account/team#select">WeChat</a></span>
-           <span><a href="system#/vs">Virtual Station</a></span>
-           <span><a href="system#/setting/list">系统管理</a></span>
-         </div> 
-         <div class="search-team" style="display: none"> 
-          <form class="form-search"> 
-           <input type="text" class="span3 search-query" placeholder="搜索团队/公司/微信名称" /> 
-           <button type="submit" class="btn search-btn">搜索</button> 
-          </form> 
+           <span><a href="/system#/" ng-class="{active: isActiveUrl('#/wechat')}">WeChat</a></span>
+           <span><a href="/system#/vs" ng-class="{active: isActiveUrl('#/vs')}">Virtual Station</a></span>
+           <span><a href="/system#/setting/list" ng-class="{active: isActiveUrl('#/setting/list') || isActiveUrl('#/setting/mine') || isActiveUrl('#/setting/back')}">系统管理</a></span>
          </div> 
           <div ng-view></div>
         </div> 

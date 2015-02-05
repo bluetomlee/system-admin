@@ -27,7 +27,7 @@
                 <h5 class="minisite-list-tt">MiniSite列表</h5>
                 <p class="minisite-list-depict">创建、修改、删除 minisite，以及minisite管理员的权限配置</p>
                 <div class="minisite-list-items">
-                  <div class="minisite-list-item" ng-repeat="mini in miniList" ng-mouseenter="isShowMiniBtm=true" ng-mouseleave="isShowMiniBtm=false">
+                  <div class="minisite-list-item"  ng-repeat="mini in miniList" ng-mouseenter="isShowMiniBtm=true" ng-mouseleave="isShowMiniBtm=false">
                     <h3 ng-bind="mini.name"></h3>
                     <div class="btm">
                       <i class="fa fa-trash remove" ng-if="!applicationSuperAdmin" ng-click="removeMinisite(mini)" ng-show="isShowMiniBtm"></i>

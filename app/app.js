@@ -5,20 +5,33 @@ var systemApp_module = angular.module('systemApp', [
     'ngRoute',
     'ngSanitize',
     'systemApp.global',
+    'systemApp.wechat',
     'systemApp.list',
     'systemApp.token',
     'systemApp.mine',
     'systemApp.back',
     'minisiteApp.list',
+    'minisiteApp.detail',
     'minisiteApp.admin'
 ])
 .config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
         $routeProvider
+            .when('/', {
+               redirectTo: '/wechat'
+            })
+            .when('/wechat', {
+                templateUrl: '/static/v1/system/app/view_wechat/wechat.html',
+                controller: 'WeChatController'
+            })
             .when('/vs', {
                 templateUrl: '/static/v1/system/app/view_minisite/minisite_list.html',
                 controller: 'MiNiSiteListController'
             })
+            .when('/vs/detail/:appId', {
+                templateUrl: '/static/v1/system/app/view_minisite/minisite_detail.html',
+                controller: 'MiNiSiteDetailController'
+            })            
             .when('/admin/:appId',{
                 templateUrl: '/static/v1/system/app/view_admin/admin.html',
                 controller: 'MiNiAdminController'
@@ -70,6 +83,7 @@ angular.module('systemApp.global',['ngRoute','cgPrompt'])
                         }
                         console.log($scope.clientSuperAdmin,$scope.teamSuperAdmin);
                     })
+                    $scope.myAdminName = simconfigs.adminName;
                 };
 
                 // 共用模块
@@ -97,16 +111,19 @@ angular.module('systemApp.global',['ngRoute','cgPrompt'])
                     }
 
                 };
-
+                // 判断当前链接是否激活
+                $scope.isActiveUrl = function(url) {
+                    return url.match($location.url());
+                };
                 // 监视页面变化
-                $scope.$watch('cusRouteParams.appId',function(newValue,oldValue){
+                // $scope.$watch('cusRouteParams.appId',function(newValue,oldValue){
                         
-                        if(!newValue && oldValue) {
-                            console.info('admin改变', newValue, oldValue);
-                            $scope.refreshCount += 1;
-                            $scope.cusRouteParams.setApplicationPromise();
-                        }
-                    }, true);  
+                //         if(!newValue && oldValue) {
+                //             console.info('admin改变', newValue, oldValue);
+                //             $scope.refreshCount += 1;
+                //             $scope.cusRouteParams.setApplicationPromise();
+                //         }
+                //     }, true);  
                 
             }
         ]);

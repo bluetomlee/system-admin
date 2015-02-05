@@ -1,18 +1,18 @@
 <div class="setting-container" ng-controler="SystemListController" ng-init="init()">
   <aside>
     <ul>
-        <li class="menu-item"><a href="system#/setting/list">所有管理员</a>
+        <li class="menu-item" ng-class="{active: isActiveUrl('#/setting/list')}"><a href="system#/setting/list">所有管理员</a>
         </li>
-        <li class="menu-item"><a href="system#/setting/mine">我</a></li>
-        <li class="menu-item"><a href="system#/setting/back">系统</a></li>
+        <li class="menu-item" ng-class="{active: isActiveUrl('#/setting/mine')}"><a href="system#/setting/mine">我</a></li>
+        <li class="menu-item" ng-class="{active: isActiveUrl('#/setting/back')}"><a href="system#/setting/back">系统</a></li>
     </ul>
   </aside>
   <div class="list-content">
       <div class="setting-list">
          <table class="table">
             <caption class="list-head">
-             <span>管理员上限：100 已激活：1 - </span>
-             <button class="btn btn-sm btn-default" ng-click="sysListClass.modalEditAdmin()">+添加管理员</button>
+             <span ng-show="clientSuperAdmin">管理员上限：{{listLimit.numLimit}} 已激活：{{listLimit.active}} - </span>
+             <button ng-show="clientSuperAdmin" class="btn btn-sm btn-default" ng-click="sysListClass.modalEditAdmin()">+添加管理员</button>
              <div class="setting-search f-fr">
                 <div class="form-inline search-group">
                   <input type="text" class="form-control" ng-model="search_text"  ng-keypress="sysListClass.chkSearch($event,search_text)"  placeholder="姓名/手机/邮箱/微信">
@@ -118,7 +118,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-primary" ng-if="!isEditAdmin" ng-click="createAdmin()">确定</button>
+              <button class="btn btn-primary" ng-if="!isEditAdmin" ng-click="addAdminActive(newAdmin)">确定</button>
               <button class="btn btn-primary" ng-if="isEditAdmin" ng-click="updateAdmin()">保存</button>  
               <button class="btn btn-default" ng-click="cancelModal()">取消</button>    
             </div>

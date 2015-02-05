@@ -1,4 +1,4 @@
-.mini-container{height: 100%;min-height: 500px;position: relative;}
+.mini-container{height: 100%;position: relative;}
 /* jstree */
 .mini-container .group-tree{position: absolute;width: 246px;height: 100%;border: 1px solid #dedddf;border-top:none;background: #fafafa;}
 

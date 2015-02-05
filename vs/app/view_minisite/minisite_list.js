@@ -24,31 +24,21 @@ var minilist_modal = angular.module('minisiteApp.list', ['ui.bootstrap', 'cgProm
 
             // 获取minisiteList
             $scope.refreshMiniList = function(){
-                $scope.objParm = {
-                    type: '4'
-                };
-                var listUrl = '/japi/team/list?';
-                $http.get(listUrl + $.param($scope.objParm)).success(function(data){
-                    if(data.items.length == 1){
-                        $scope.locateUrl(data.items[0].id);
-                    }else{
-                        $scope.miniListGroup = data.items;
-                        $scope.isShowSearch = true;
-                    }
+                console.log($scope.clientSuperAdmin)
+                var listUrl,
+                    vsUrl = '/japi/vs/list';
+                if($scope.clientSuperAdmin || $scope.teamSuperAdmin){
+                    listUrl  = '/japi/vs/application/list';
+                }else if($scope.applicationSuperAdmin){
+                    listUrl = '/japi/vs/applications/get';
+                }
+                $http.get(listUrl).success(function(data){
+                    $scope.miniList = ($scope.applicationSuperAdmin) ? data.item : data.items;
+                    console.log($scope.miniList);
                 });
-            };
-
-            // 进入某个VS
-            $scope.locateUrl = function(id){
-                window.location.href = '/system#/vs/detail/' + id;
-            };  
-
-            $scope.searchList = function(keywords){
-                $scope.objParm.keyword = keywords;
-                var url = '/japi/team/list?' + $.param($scope.objParm);
-                $http.get(url).success(function(data){
-                    $scope.miniListGroup = data.items;
-                })
+                $http.get(vsUrl).success(function(result){
+                    $scope.vsInfor = result.items[0]
+                });
             };
 
             // 共用Notify提醒
@@ -113,6 +103,7 @@ var minilist_modal = angular.module('minisiteApp.list', ['ui.bootstrap', 'cgProm
 
             // 上传头像
             $scope.modalUploadImg = function(){
+                if(!$scope.teamSuperAdmin) return;
                 var modalNewApp = $modal.open({
                     templateUrl: 'materialImageUploadModal.html',
                     controller: 'CreateMiniSiteController',

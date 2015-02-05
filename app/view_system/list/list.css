@@ -1,29 +1,10 @@
 .setting-container{position: relative;min-height:500px;}
-.setting-container aside{position: absolute;height: 100%;min-height: 501px;width: 148px;text-align: center;background-color: #fafafa;border-bottom: 1px solid #dedddf;border-right: 1px solid #dedddf;}
+.setting-container aside{float: left;height: 100%;min-height: 501px;width: 148px;text-align: center;background-color: #fafafa;border-bottom: 1px solid #dedddf;border-right: 1px solid #dedddf;}
 
 
 /* 左侧 */
+.setting-container .active{background-color: #eee}
 .menu-item{position:relative;line-height:40px;padding:0 40px;border-bottom: 1px solid #dedddf;}
-.menu-item .menu-tri{position: absolute;right: 0;top:0;border-width:3px;border-style:solid;border-color: #666 #fff #fff #fff;}
-.menu-item .active:after{
-	content: "";
-	position: absolute;
-	top: 15px;
-	left: 64px;
-	width: 65px;
-	height: 65px;
-	border: 2px solid #DEDEDE;
-	-webkit-transform: rotate(44deg);
-	-moz-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
-	background-color: #FEFEFE;
-	background-image: -moz-linear-gradient(top, #f21972, #e80f43);
-	background-image: -o-linear-gradient(top, #f21972, #e80f43);
-	/* background-image: linear-gradient(to bottom, #F21972, #E80F43); */
-	-webkit-box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.7) inset, -1px 0 0 rgba(255, 255, 255, 0.7) inset;
-	box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.7) inset, -1px 0 0 rgba(255, 255, 255, 0.7) inset;
-}
 .menu-item a,.menu-item a:hover{color:#333;}
 .list-content{margin-left:157px;}
 
